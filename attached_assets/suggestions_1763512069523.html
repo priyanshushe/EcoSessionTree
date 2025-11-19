@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suggestions - Eco Twin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="suggestions-page" data-category="{{ category }}">
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1>🌍 Eco Twin</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/calculator">Calculator</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/suggestions" class="active">Suggestions</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container" style="padding: 2rem 1.5rem;">
+        <h1 class="page-title" style="margin-bottom: 2rem;">💡 Eco-Friendly Suggestions</h1>
+        
+        <div class="category-indicator" style="background: white; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+            <h2 id="categoryTitle">Your Footprint: <span id="categoryLevel">{{ category|title }}</span></h2>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="suggestions-tabs">
+            <button class="tab-btn active" onclick="switchTab('all')">🌍 All Suggestions</button>
+            <button class="tab-btn" onclick="switchTab('electricity')">⚡ Power Plants</button>
+            <button class="tab-btn" onclick="switchTab('transport')">🚗 Transport</button>
+            <button class="tab-btn" onclick="switchTab('industries')">🏭 Industries</button>
+            <button class="tab-btn" onclick="switchTab('waste')">🗑️ Waste</button>
+            <button class="tab-btn" onclick="switchTab('events')">🌿 Events</button>
+        </div>
+
+        <div class="suggestions-grid">
+            <div class="suggestion-card" data-category="electricity" style="margin-bottom: 2rem; background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <div class="suggestion-icon" style="font-size: 3rem; margin-bottom: 1rem;">⚡</div>
+                <h3 style="margin-bottom: 1.5rem;">Power Plants</h3>
+                <div class="suggestions-list">
+                    <div class="suggestion-item low-suggestion" style="margin-bottom: 1.5rem; padding: 1rem; background: #E8F5E9; border-radius: 10px;">
+                        <strong style="color: #2E7D32; display: block; margin-bottom: 0.5rem;">Low Footprint:</strong>
+                        <ul style="margin-left: 1.5rem; color: #555;">
+                            <li>Switch to LED bulbs for all lighting</li>
+                            <li>Unplug devices when not in use</li>
+                            <li>Use natural light during the day</li>
+                            <li>Install a smart thermostat</li>
+                        </ul>
+                    </div>
+                    <div class="suggestion-item medium-suggestion" style="margin-bottom: 1.5rem; padding: 1rem; background: #FFF3E0; border-radius: 10px;">
+                        <strong style="color: #E65100; display: block; margin-bottom: 0.5rem;">Medium Footprint:</strong>
+                        <ul style="margin-left: 1.5rem; color: #555;">
+                            <li>Consider solar panels for your home</li>
+                            <li>Upgrade to energy-efficient appliances</li>
+                            <li>Reduce AC/heating usage by 2-3°C</li>
+                            <li>Use power strips to eliminate phantom loads</li>
+                        </ul>
+                    </div>
+                    <div class="suggestion-item high-suggestion" style="margin-bottom: 1.5rem; padding: 1rem; background: #FCE4EC; border-radius: 10px;">
+                        <strong style="color: #B71C1C; display: block; margin-bottom: 0.5rem;">High Footprint:</strong>
+                        <ul style="margin-left: 1.5rem; color: #555;">
+                            <li>URGENT: Switch to renewable energy provider</li>
+                            <li>Replace old appliances immediately</li>
+                            <li>Install solar panels or join community solar</li>
+                            <li>Conduct a home energy audit</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 1rem;">
+                    <button class="action-btn btn btn-primary" onclick="completeAction('Reduce Power Plants', 15)" style="flex: 1;">✅ Mark Action Complete (+15 pts)</button>
+                    <button class="btn" onclick="viewOnMap('electricity')" style="flex: 0.6; background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;">🗺️ View on Map</button>
+                </div>
+            </div>
+
+            <div class="suggestion-card" data-category="transport" style="margin-bottom: 2rem; background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <div class="suggestion-icon" style="font-size: 3rem; margin-bottom: 1rem;">🚗</div>
+                <h3 style="margin-bottom: 1.5rem;">Transport</h3>
+                <div class="suggestions-list">
+                    <div class="suggestion-item low-suggestion" style="margin-bottom: 1.5rem; padding: 1rem; background: #E8F5E9; border-radius: 10px;">
+                        <strong style="color: #2E7D32; display: block; margin-bottom: 0.5rem;">Low Footprint:</strong>
+                        <ul style="margin-left: 1.5rem; color: #555;">
+                            <li>Great! Keep walking/biking</li>
+                            <li>Share your eco-friendly commute tips</li>
+                            <li>Consider carpooling occasionally</li>
+                            <li>Maintain your bike regularly</li>
+                        </ul>
+                    </div>
+                    <div class="suggestion-item medium-suggestion" style="margin-bottom: 1.5rem; padding: 1rem; background: #FFF3E0; border-radius: 10px;">
+                        <strong style="color: #E65100; display: block; margin-bottom: 0.5rem;">Medium Footprint:</strong>
+                        <ul style="margin-left: 1.5rem; color: #555;">
+                            <li>Walk or bike for trips under 2 km</li>
+                            <li>Use public transit 2-3 times per week</li>
+                            <li>Carpool when possible</li>
+                            <li>Consider a hybrid or electric vehicle</li>
+                        </ul>
+                    </div>
+                    <div class="suggestion-item high-suggestion" style="margin-bottom: 1.5rem; padding: 1rem; background: #FCE4EC; border-radius: 10px;">
+                        <strong style="color: #B71C1C; display: block; margin-bottom: 0.5rem;">High Footprint:</strong>
+                        <ul style="margin-left: 1.5rem; color: #555;">
+                            <li>URGENT: Reduce car usage by 50%</li>
+                            <li>Switch to public transit immediately</li>
+                            <li>Work from home when possible</li>
+                            <li>Trade in for a fuel-efficient vehicle</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 1rem;">
+                    <button class="action-btn btn btn-primary" onclick="completeAction('Improve Transport', 20)" style="flex: 1;">✅ Mark Action Complete (+20 pts)</button>
+                    <button class="btn" onclick="viewOnMap('transport')" style="flex: 0.6; background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;">🗺️ View on Map</button>
+                </div>
+            </div>
+
+            <div class="suggestion-card" data-category="industries" style="margin-bottom: 2rem; background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <div class="suggestion-icon" style="font-size: 3rem; margin-bottom: 1rem;">🏭</div>
+                <h3 style="margin-bottom: 1.5rem;">Industries</h3>
+                <div class="suggestions-list">
+                    <div class="suggestion-item low-suggestion" style="margin-bottom: 1.5rem; padding: 1rem; background: #D8F0DD; border-left: 4px solid #4CAF50; border-radius: 10px;">
+                        <strong style="color: #2E7D32; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">🌱 Low Impact Consumption:</strong>
+                        <ul style="margin-left: 1.5rem; color: #555;">
+                            <li>Excellent! Continue buying locally-sourced items</li>
+                            <li>Choose products with minimal packaging</li>
+                            <li>Support sustainable and ethical brands</li>
+                            <li>Share your eco-conscious shopping habits</li>
+                        </ul>
+                    </div>
+                    <div class="suggestion-item medium-suggestion" style="margin-bottom: 1.5rem; padding: 1rem; background: #FFF4E0; border-left: 4px solid #FFA726; border-radius: 10px;">
+                        <strong style="color: #E65100; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">🏭 Medium Impact Consumption:</strong>
+                        <ul style="margin-left: 1.5rem; color: #555;">
+                            <li>Buy from local producers when possible</li>
+                            <li>Choose products with eco-certifications</li>
+                            <li>Reduce consumption of heavily-processed goods</li>
+                            <li>Consider buying second-hand items</li>
+                        </ul>
+                    </div>
+                    <div class="suggestion-item high-suggestion" style="margin-bottom: 1.5rem; padding: 1rem; background: #FFE8E8; border-left: 4px solid #E53935; border-radius: 10px;">
+                        <strong style="color: #B71C1C; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">🏢 High Impact Consumption:</strong>
+                        <ul style="margin-left: 1.5rem; color: #555;">
+                            <li>URGENT: Reduce overall consumption by 30%</li>
+                            <li>Switch to sustainable and local alternatives</li>
+                            <li>Avoid fast fashion and disposable products</li>
+                            <li>Choose plant-based foods and eco-friendly goods</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 1rem;">
+                    <button class="action-btn btn btn-primary" onclick="completeAction('Improve Industries', 25)" style="flex: 1;">✅ Mark Action Complete (+25 pts)</button>
+                    <button class="btn" onclick="viewOnMap('industries')" style="flex: 0.6; background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;">🗺️ View on Map</button>
+                </div>
+            </div>
+
+            <div class="suggestion-card" data-category="waste" style="margin-bottom: 2rem; background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <div class="suggestion-icon" style="font-size: 3rem; margin-bottom: 1rem;">🗑️</div>
+                <h3 style="margin-bottom: 1.5rem;">Waste Management</h3>
+                <div class="suggestions-list">
+                    <div class="suggestion-item low-suggestion" style="margin-bottom: 1.5rem; padding: 1rem; background: #E8F5E9; border-radius: 10px;">
+                        <strong style="color: #2E7D32; display: block; margin-bottom: 0.5rem;">Low Footprint:</strong>
+                        <ul style="margin-left: 1.5rem; color: #555;">
+                            <li>Perfect! Keep recycling and composting</li>
+                            <li>Share zero-waste tips with friends</li>
+                            <li>Use reusable bags and containers</li>
+                            <li>Repair items instead of replacing</li>
+                        </ul>
+                    </div>
+                    <div class="suggestion-item medium-suggestion" style="margin-bottom: 1.5rem; padding: 1rem; background: #FFF3E0; border-radius: 10px;">
+                        <strong style="color: #E65100; display: block; margin-bottom: 0.5rem;">Medium Footprint:</strong>
+                        <ul style="margin-left: 1.5rem; color: #555;">
+                            <li>Start composting organic waste</li>
+                            <li>Recycle properly (clean & sorted)</li>
+                            <li>Use reusable water bottles</li>
+                            <li>Avoid single-use plastics</li>
+                        </ul>
+                    </div>
+                    <div class="suggestion-item high-suggestion" style="margin-bottom: 1.5rem; padding: 1rem; background: #FCE4EC; border-radius: 10px;">
+                        <strong style="color: #B71C1C; display: block; margin-bottom: 0.5rem;">High Footprint:</strong>
+                        <ul style="margin-left: 1.5rem; color: #555;">
+                            <li>URGENT: Start recycling immediately</li>
+                            <li>Set up home composting system</li>
+                            <li>Eliminate single-use plastics</li>
+                            <li>Buy products with minimal packaging</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 1rem;">
+                    <button class="action-btn btn btn-primary" onclick="completeAction('Reduce Waste', 15)" style="flex: 1;">✅ Mark Action Complete (+15 pts)</button>
+                    <button class="btn" onclick="viewOnMap('waste')" style="flex: 0.6; background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;">🗺️ View on Map</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Eco-Events & Workshops Section -->
+        <div class="eco-events-section" style="margin-top: 3rem; background: linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 100%); padding: 3rem; border-radius: 20px; box-shadow: 0 6px 25px rgba(0,0,0,0.08); border: 2px solid #A3D9A5;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
+                <h2 style="margin: 0; color: #2E7D32; font-size: 2rem;">🌿 Upcoming Eco-Events & Workshops</h2>
+                <div style="background: #FFF9C4; padding: 10px 20px; border-radius: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid #FFB300;">
+                    <span style="color: #F57C00; font-weight: 600; font-size: 0.95rem;">🔔 4 India-based events available!</span>
+                </div>
+            </div>
+            
+            <p style="text-align: center; color: #5F6F81; margin-bottom: 2.5rem; font-size: 1.05rem; line-height: 1.6;">Join our community events to make a real impact on the environment! Participate, learn, and connect with fellow eco-warriors. 🌍</p>
+            
+            <div class="events-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+                <!-- Global Sustainability Summit 2025 - India -->
+                <div class="event-card" style="background: white; border: 2px solid #A3D9A5; border-radius: 15px; padding: 2rem; transition: all 0.3s; cursor: pointer; position: relative; overflow: hidden;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 10px 30px rgba(163,217,165,0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.08)'">
+                    <div style="position: absolute; top: 15px; right: 15px; background: #FF6F00; color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px;">INDIA</div>
+                    <div style="font-size: 3.5rem; margin-bottom: 1rem; text-align: center;">🌍</div>
+                    <h3 style="color: #2E7D32; margin-bottom: 1rem; font-size: 1.4rem; text-align: center;">Global Sustainability Summit 2025</h3>
+                    <div style="background: #E8F5E9; padding: 12px; border-radius: 10px; margin-bottom: 1rem;">
+                        <p style="color: #2E7D32; margin: 0; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span>📅</span> 2025 (Dates TBA)</p>
+                        <p style="color: #2E7D32; margin: 8px 0 0 0; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span>⏰</span> Multi-day Conference</p>
+                    </div>
+                    <p style="color: #666; margin-bottom: 0.8rem; display: flex; align-items: start; gap: 8px;"><strong style="color: #2E7D32;">📍 Location:</strong> <span>New Delhi, India (IISD & CMI)</span></p>
+                    <p style="color: #555; margin-bottom: 1.2rem; line-height: 1.6;">Major climate conference focused on carbon emissions reduction and sustainability. Features "I Pledge" campaign with carbon footprint calculator recommended by UNFCCC. Perfect for all footprint levels!</p>
+                    <div style="display: flex; gap: 10px; margin-top: 1rem;">
+                        <button onclick="window.open('https://gss2025.iisdindia.in/', '_blank')" style="flex: 1; padding: 10px; background: linear-gradient(135deg, #4CAF50, #81C784); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">🌐 Learn More</button>
+                        <button style="flex: 1; padding: 10px; background: white; color: #2E7D32; border: 2px solid #2E7D32; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#E8F5E9'" onmouseout="this.style.background='white'">ℹ️ Details</button>
+                    </div>
+                </div>
+                
+                <!-- India Circular Economy Forum 2025 -->
+                <div class="event-card" style="background: white; border: 2px solid #A8C5DA; border-radius: 15px; padding: 2rem; transition: all 0.3s; cursor: pointer; position: relative; overflow: hidden;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 10px 30px rgba(168,197,218,0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.08)'">
+                    <div style="position: absolute; top: 15px; right: 15px; background: #64B5F6; color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px;">POPULAR</div>
+                    <div style="font-size: 3.5rem; margin-bottom: 1rem; text-align: center;">♻️</div>
+                    <h3 style="color: #1565C0; margin-bottom: 1rem; font-size: 1.4rem; text-align: center;">India Circular Economy Forum 2025</h3>
+                    <div style="background: #E3F2FD; padding: 12px; border-radius: 10px; margin-bottom: 1rem;">
+                        <p style="color: #1565C0; margin: 0; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span>📅</span> 2025 (Dates TBA)</p>
+                        <p style="color: #1565C0; margin: 8px 0 0 0; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span>⏰</span> Full Day Event</p>
+                    </div>
+                    <p style="color: #666; margin-bottom: 0.8rem; display: flex; align-items: start; gap: 8px;"><strong style="color: #1565C0;">📍 Location:</strong> <span>India (Virtual + In-person)</span></p>
+                    <p style="color: #555; margin-bottom: 1.2rem; line-height: 1.6;">Keynotes, workshops, and networking on reducing carbon footprint through circular economy. Topics: European Green Deal, EPR, SDGs. Ideal for medium-high footprint individuals!</p>
+                    <div style="display: flex; gap: 10px; margin-top: 1rem;">
+                        <button onclick="window.open('https://ic-ce.com/icef2025/', '_blank')" style="flex: 1; padding: 10px; background: linear-gradient(135deg, #2196F3, #64B5F6); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">🌐 Register</button>
+                        <button style="flex: 1; padding: 10px; background: white; color: #1565C0; border: 2px solid #1565C0; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#E3F2FD'" onmouseout="this.style.background='white'">ℹ️ Details</button>
+                    </div>
+                </div>
+                
+                <!-- CII Carbon Footprint Certification -->
+                <div class="event-card" style="background: white; border: 2px solid #D4C5E0; border-radius: 15px; padding: 2rem; transition: all 0.3s; cursor: pointer; position: relative; overflow: hidden;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 10px 30px rgba(212,197,224,0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.08)'">
+                    <div style="position: absolute; top: 15px; right: 15px; background: #BA68C8; color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px;">CERTIFICATION</div>
+                    <div style="font-size: 3.5rem; margin-bottom: 1rem; text-align: center;">🎓</div>
+                    <h3 style="color: #6A1B9A; margin-bottom: 1rem; font-size: 1.4rem; text-align: center;">CII Carbon Footprint Professional</h3>
+                    <div style="background: #F3E5F5; padding: 12px; border-radius: 10px; margin-bottom: 1rem;">
+                        <p style="color: #6A1B9A; margin: 0; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span>📅</span> Aug 23, 24, 30, 31, 2025</p>
+                        <p style="color: #6A1B9A; margin: 8px 0 0 0; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span>⏰</span> Online Course</p>
+                    </div>
+                    <p style="color: #666; margin-bottom: 0.8rem; display: flex; align-items: start; gap: 8px;"><strong style="color: #6A1B9A;">📍 Location:</strong> <span>Online (India)</span></p>
+                    <p style="color: #555; margin-bottom: 1.2rem; line-height: 1.6;">Professional certification in carbon footprint assessment by CII (Confederation of Indian Industry). Learn GHG Protocol standards and emissions reporting. Great for all levels!</p>
+                    <div style="display: flex; gap: 10px; margin-top: 1rem;">
+                        <button onclick="window.open('https://ciielearn.in/', '_blank')" style="flex: 1; padding: 10px; background: linear-gradient(135deg, #9C27B0, #BA68C8); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">🎓 Enroll</button>
+                        <button style="flex: 1; padding: 10px; background: white; color: #6A1B9A; border: 2px solid #6A1B9A; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#F3E5F5'" onmouseout="this.style.background='white'">ℹ️ Details</button>
+                    </div>
+                </div>
+
+                <!-- India GHG Program Training -->
+                <div class="event-card" style="background: white; border: 2px solid #FFD8B2; border-radius: 15px; padding: 2rem; transition: all 0.3s; cursor: pointer; position: relative; overflow: hidden;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 10px 30px rgba(255,216,178,0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.08)'">
+                    <div style="position: absolute; top: 15px; right: 15px; background: #FB8C00; color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px;">WORKSHOP</div>
+                    <div style="font-size: 3.5rem; margin-bottom: 1rem; text-align: center;">📊</div>
+                    <h3 style="color: #E65100; margin-bottom: 1rem; font-size: 1.4rem; text-align: center;">India GHG Program Training</h3>
+                    <div style="background: #FFF3E0; padding: 12px; border-radius: 10px; margin-bottom: 1rem;">
+                        <p style="color: #E65100; margin: 0; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span>📅</span> Throughout 2025</p>
+                        <p style="color: #E65100; margin: 8px 0 0 0; font-weight: 600; display: flex; align-items: center; gap: 8px;"><span>⏰</span> 2-Day Sessions</p>
+                    </div>
+                    <p style="color: #666; margin-bottom: 0.8rem; display: flex; align-items: start; gap: 8px;"><strong style="color: #E65100;">📍 Location:</strong> <span>Regional Cities (India)</span></p>
+                    <p style="color: #555; margin-bottom: 1.2rem; line-height: 1.6;">Regional capacity building by WRI India, CII & TERI. Learn carbon footprint assessment, GHG emissions (Scope 1,2,3), and reporting platforms. For businesses and individuals!</p>
+                    <div style="display: flex; gap: 10px; margin-top: 1rem;">
+                        <button onclick="window.open('https://indiaghgp.org/training', '_blank')" style="flex: 1; padding: 10px; background: linear-gradient(135deg, #FF9800, #FFB74D); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">📚 View Schedule</button>
+                        <button style="flex: 1; padding: 10px; background: white; color: #E65100; border: 2px solid #E65100; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#FFF3E0'" onmouseout="this.style.background='white'">ℹ️ Details</button>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div style="margin-top: 2.5rem; padding: 1.5rem; background: white; border-radius: 12px; border-left: 5px solid #FF9800; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                <p style="margin: 0; color: #E65100; font-weight: 600; display: flex; align-items: center; gap: 10px;"><span style="font-size: 1.5rem;">🔔</span> <span>Stay Updated: Subscribe to our event newsletter for weekly eco-activity alerts!</span></p>
+            </div>
+        </div>
+
+        <!-- Interactive Map Section -->
+        <div class="eco-map-section" style="margin-top: 3rem; margin-bottom: 2rem; background: white; padding: 2.5rem; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+            <h2 style="text-align: center; margin-bottom: 2rem; color: #3A4A5C;">🗺️ Nearby Eco-Friendly Locations</h2>
+            <div class="map-container" style="width: 100%; height: 450px; border-radius: 12px; overflow: hidden; position: relative; background: linear-gradient(135deg, #E8F0F5 0%, #D8E8F0 100%); display: flex; align-items: center; justify-content: center;">
+                <div id="map" style="width: 100%; height: 100%; position: relative;">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 10;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">🗺️</div>
+                        <p style="color: #5F6F81; font-size: 1.1rem; margin-bottom: 1rem;">Interactive map showing eco-friendly locations</p>
+                        <button class="btn btn-primary" onclick="loadMap()" style="padding: 12px 30px; font-size: 1rem;">📍 Load Map with Your Location</button>
+                    </div>
+                </div>
+            </div>
+            <div class="map-legend" style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.8rem; background: #D8F0DD; border-radius: 8px;">
+                    <span style="font-size: 1.5rem;">🌳</span>
+                    <span style="color: #2E7D32; font-weight: 600;">Parks & Gardens</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.8rem; background: #E3F2FD; border-radius: 8px;">
+                    <span style="font-size: 1.5rem;">♻️</span>
+                    <span style="color: #1565C0; font-weight: 600;">Recycling Centers</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.8rem; background: #F3E5F5; border-radius: 8px;">
+                    <span style="font-size: 1.5rem;">🌿</span>
+                    <span style="color: #6A1B9A; font-weight: 600;">Community Gardens</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.8rem; background: #FFF4E0; border-radius: 8px;">
+                    <span style="font-size: 1.5rem;">🏪</span>
+                    <span style="color: #E65100; font-weight: 600;">Eco Stores</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Eco Twin. Making the planet greener, one calculation at a time.</p>
+        </div>
+    </footer>
+
+    <script>
+        function completeAction(actionName, points) {
+            fetch('/api/complete-action', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: actionName, points: points })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`✅ Great job! You earned ${points} points for: ${actionName}`);
+                }
+            });
+        }
+
+        function viewOnMap(category) {
+            document.querySelector('.eco-map-section').scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => loadMap(category), 500);
+        }
+
+        function loadMap(category) {
+            if (typeof category === 'undefined') {
+                category = 'all';
+            }
+            
+            const mapDiv = document.getElementById('map');
+            
+            const locations = {
+                electricity: [
+                    { emoji: '🌳', name: 'Solar Energy Parks', color: '#2E7D32', distance: '2.3 km', lat: 0.02, lon: 0.01 },
+                    { emoji: '♻️', name: 'Energy Efficiency Center', color: '#1565C0', distance: '1.8 km', lat: -0.015, lon: 0.02 },
+                    { emoji: '🌿', name: 'Green Power Hub', color: '#6A1B9A', distance: '3.5 km', lat: 0.03, lon: -0.01 },
+                    { emoji: '🏪', name: 'Smart Home Store', color: '#E65100', distance: '0.9 km', lat: -0.008, lon: -0.012 }
+                ],
+                transport: [
+                    { emoji: '🚌', name: 'Central Bus Station', color: '#1565C0', distance: '0.5 km', lat: -0.005, lon: 0.008 },
+                    { emoji: '🚴', name: 'Bike Share Station', color: '#2E7D32', distance: '0.3 km', lat: 0.003, lon: -0.004 },
+                    { emoji: '🚊', name: 'Light Rail Stop', color: '#6A1B9A', distance: '1.2 km', lat: 0.012, lon: 0.015 },
+                    { emoji: '🚲', name: 'Bike Repair Shop', color: '#E65100', distance: '0.7 km', lat: -0.007, lon: -0.009 },
+                    { emoji: '🚇', name: 'Metro Station', color: '#1565C0', distance: '1.0 km', lat: 0.01, lon: -0.012 },
+                    { emoji: '🛴', name: 'E-Scooter Hub', color: '#2E7D32', distance: '0.4 km', lat: -0.004, lon: 0.005 }
+                ],
+                industries: [
+                    { emoji: '🌾', name: "Local Farmer's Market", color: '#2E7D32', distance: '1.5 km', lat: 0.015, lon: -0.018 },
+                    { emoji: '🏪', name: 'Zero-Waste Store', color: '#E65100', distance: '0.8 km', lat: -0.008, lon: 0.01 },
+                    { emoji: '👕', name: 'Sustainable Fashion Shop', color: '#6A1B9A', distance: '2.1 km', lat: 0.021, lon: 0.025 },
+                    { emoji: '🌿', name: 'Organic Food Co-op', color: '#2E7D32', distance: '1.9 km', lat: -0.019, lon: -0.022 }
+                ],
+                waste: [
+                    { emoji: '♻️', name: 'City Recycling Center', color: '#1565C0', distance: '1.8 km', lat: -0.015, lon: 0.02 },
+                    { emoji: '🌿', name: 'Composting Facility', color: '#6A1B9A', distance: '3.2 km', lat: 0.032, lon: -0.028 },
+                    { emoji: '🗑️', name: 'E-Waste Drop-off', color: '#E65100', distance: '2.5 km', lat: -0.025, lon: -0.03 },
+                    { emoji: '♻️', name: 'Textile Recycling Center', color: '#1565C0', distance: '1.4 km', lat: 0.014, lon: 0.016 },
+                    { emoji: '🌳', name: 'Hazardous Waste Facility', color: '#2E7D32', distance: '4.0 km', lat: 0.04, lon: -0.035 }
+                ],
+                all: [
+                    { emoji: '🌳', name: 'Green Valley Park', color: '#2E7D32', distance: '2.3 km', lat: 0.02, lon: 0.01 },
+                    { emoji: '♻️', name: 'City Recycling Center', color: '#1565C0', distance: '1.8 km', lat: -0.015, lon: 0.02 },
+                    { emoji: '🌿', name: 'Community Garden Hub', color: '#6A1B9A', distance: '3.5 km', lat: 0.03, lon: -0.01 },
+                    { emoji: '🏪', name: 'Eco Market', color: '#E65100', distance: '0.9 km', lat: -0.008, lon: -0.012 },
+                    { emoji: '🌳', name: 'Riverside Trail', color: '#2E7D32', distance: '4.2 km', lat: 0.035, lon: 0.03 },
+                    { emoji: '🌿', name: 'Urban Farm Co-op', color: '#6A1B9A', distance: '5.1 km', lat: 0.042, lon: -0.025 }
+                ]
+            };
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    
+                    const categoryTitle = {
+                        electricity: '⚡ Energy-Related Locations',
+                        transport: '🚗 Transport & Mobility Options',
+                        industries: '🏭 Sustainable Shopping & Local Producers',
+                        waste: '♻️ Recycling & Waste Management',
+                        all: '🌍 All Eco-Friendly Locations'
+                    };
+                    
+                    const selectedLocations = locations[category] || locations.all;
+                    const locationsHTML = selectedLocations.map(loc => `
+                        <div class="map-marker" style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                            <div style="font-size: 2rem; margin-bottom: 8px;">${loc.emoji}</div>
+                            <h4 style="color: ${loc.color}; margin-bottom: 5px;">${loc.name}</h4>
+                            <p style="color: #666; font-size: 0.9rem; margin-bottom: 8px;">${loc.distance} away</p>
+                            <a href="https://www.google.com/maps/dir/?api=1&destination=${lat + loc.lat},${lon + loc.lon}" target="_blank" style="color: #1976D2; text-decoration: none; font-size: 0.85rem; display: inline-block; padding: 5px 10px; border: 1px solid #1976D2; border-radius: 5px; transition: all 0.2s;" onmouseover="this.style.background='#1976D2'; this.style.color='white'" onmouseout="this.style.background='transparent'; this.style.color='#1976D2'">📍 Get Directions</a>
+                        </div>
+                    `).join('');
+                    
+                    mapDiv.innerHTML = `
+                        <div style="width: 100%; height: 100%; background: #E8F0F5; position: relative; padding: 20px; overflow-y: auto;">
+                            <div style="text-align: center; padding: 20px;">
+                                <h3 style="color: #3A4A5C; margin-bottom: 10px;">${categoryTitle[category]}</h3>
+                                <p style="color: #5F6F81; margin-bottom: 20px; font-size: 0.9rem;">📍 Your Location: ${lat.toFixed(4)}, ${lon.toFixed(4)}</p>
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; max-width: 1000px; margin: 0 auto;">
+                                ${locationsHTML}
+                            </div>
+                        </div>
+                    `;
+                }, function(error) {
+                    const errorMessages = {
+                        1: 'Location access denied. Please enable location services to view nearby eco-friendly places.',
+                        2: 'Location information unavailable. Please try again.',
+                        3: 'Location request timed out. Please try again.'
+                    };
+                    const errorMsg = errorMessages[error.code] || 'Unable to retrieve your location.';
+                    mapDiv.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #F28B82;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
+                            <p style="font-weight: 600; margin-bottom: 10px;">${errorMsg}</p>
+                            <button class="btn btn-primary" onclick="loadMap('${category}')" style="margin-top: 15px; padding: 10px 20px;">🔄 Try Again</button>
+                        </div>
+                    `;
+                });
+            } else {
+                mapDiv.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #F28B82;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
+                        <p style="font-weight: 600;">Geolocation is not supported by your browser.</p>
+                        <p style="color: #666; margin-top: 10px;">Please use a modern browser that supports geolocation.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Tab switching functionality
+        function switchTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const suggestionCards = document.querySelectorAll('.suggestion-card');
+            const eventsSection = document.querySelector('.eco-events-section');
+            
+            if (tabName === 'all') {
+                suggestionCards.forEach(card => card.style.display = 'block');
+                if (eventsSection) eventsSection.style.display = 'block';
+            } else if (tabName === 'events') {
+                suggestionCards.forEach(card => card.style.display = 'none');
+                if (eventsSection) eventsSection.style.display = 'block';
+            } else {
+                suggestionCards.forEach(card => {
+                    if (card.dataset.category === tabName) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                if (eventsSection) eventsSection.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

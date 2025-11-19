@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Twin - Carbon Footprint Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="home-page">
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1>🌍 Eco Twin</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/calculator">Calculator</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/suggestions">Suggestions</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Track Your Carbon Footprint</h1>
+                <p class="hero-subtitle">Make a difference with real-time environmental data</p>
+                
+                <div class="hero-animation" style="text-align: center; margin: 2rem auto; font-size: 8rem; animation: heroFloat 3s ease-in-out infinite;">
+                    🌱
+                </div>
+                
+                <p style="text-align: center; margin-bottom: 2rem; font-size: 1.2rem; color: var(--text-dark); font-weight: 500; font-style: italic;">Track your footprint, nurture the planet</p>
+
+                <div class="cta-buttons">
+                    <a href="/calculator" class="btn btn-primary">Start Calculating</a>
+                    <a href="/suggestions" class="btn btn-secondary">Get Eco Tips</a>
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📍</div>
+                    <h3>Live GPS Location</h3>
+                    <p style="text-align: center;">Get accurate calculations based on your exact location with real-time environmental data</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Environmental APIs</h3>
+                    <p style="text-align: center;">Powered by Power Plant Maps, OpenAQ, and transport emission databases</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Dual Calculation Modes</h3>
+                    <p style="text-align: center;">Choose between simple questions or detailed numerical inputs</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Smart Suggestions</h3>
+                    <p style="text-align: center;">Get personalized tips based on your footprint category</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🌳</div>
+                    <h3>Gamification</h3>
+                    <p style="text-align: center;">Watch your eco-twin tree grow as you complete eco-challenges</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Track Progress</h3>
+                    <p style="text-align: center;">View your history and see how your footprint changes over time</p>
+                </div>
+            </div>
+            
+            <!-- Daily Eco-Fact Section -->
+            <div class="eco-fact-section" style="background: white; padding: 2.5rem; border-radius: 15px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); margin-top: 3rem;">
+                <h2 style="text-align: center; color: #2E7D32; margin-bottom: 1.5rem;">💚 Daily Eco-Fact</h2>
+                <div class="eco-fact-content" id="ecoFactText" style="font-size: 1.15rem; line-height: 1.8; text-align: center; padding: 1rem; background: linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 100%); border-radius: 10px; border-left: 4px solid #4CAF50;">
+                    Loading eco-fact...
+                </div>
+                <div class="eco-fact-action" id="ecoFactAction" style="margin-top: 1.5rem; padding: 1.25rem; background: #FFF9C4; border-radius: 10px; border-left: 4px solid #FBC02D;">
+                    <strong style="color: #F57F17; display: block; margin-bottom: 0.5rem;">💡 Action Tip:</strong>
+                    <span id="actionTipText" style="color: #555;">Loading tip...</span>
+                </div>
+                <div class="eco-fact-analogy" id="ecoFactAnalogy" style="margin-top: 1.25rem; padding: 1.25rem; background: #E1F5FE; border-radius: 10px; border-left: 4px solid #039BE5;">
+                    <strong style="color: #0277BD; display: block; margin-bottom: 0.5rem;">🌍 Fun Fact:</strong>
+                    <span id="analogyText" style="color: #555;">Loading analogy...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Eco Twin. Making the planet greener, one calculation at a time.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Load daily eco-fact with action tip and analogy
+        fetch('/api/daily-fact')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('ecoFactText').innerHTML = data.fact;
+                document.getElementById('actionTipText').innerHTML = data.action_tip;
+                document.getElementById('analogyText').innerHTML = data.analogy;
+            })
+            .catch(() => {
+                document.getElementById('ecoFactText').innerHTML = 'Every small action counts towards a greener planet!';
+                document.getElementById('actionTipText').innerHTML = 'Start with one eco-friendly habit today!';
+                document.getElementById('analogyText').innerHTML = 'Small changes create big impacts over time.';
+            });
+    </script>
+</body>
+</html>
