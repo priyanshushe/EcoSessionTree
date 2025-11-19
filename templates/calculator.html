@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator - Eco Twin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1>🌍 Eco Twin</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/calculator" class="active">Calculator</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/suggestions">Suggestions</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container calculator-page">
+        <h1 class="page-title">🌱Carbon Footprint Calculator</h1>
+
+        <!-- GPS Location Section -->
+        <div class="location-section">
+            <button id="getLocationBtn" class="btn btn-primary">📍 Get My Location (Required)</button>
+            <div id="locationInfo" class="location-info" style="display:none;">
+                <p style="font-size: 1.2rem; font-weight: 600;">📌 Location: <span id="cityText">Loading...</span></p>
+                <p>🌡️ Weather: <span id="weatherText">Loading...</span></p>
+                <p>⚡ Grid Carbon Intensity: <span id="carbonIntensity">Loading...</span> kg CO₂/kWh (<span id="intensitySource">-</span>)</p>
+                <p>🌫️ Air Quality Index: <span id="aqiText">Loading...</span> (<span id="aqiSource">-</span>)</p>
+            </div>
+            <div id="map" style="height: 350px; margin-top: 15px; display:none; border-radius: 10px;"></div>
+        </div>
+
+
+        <!-- Mode Toggle -->
+        <div class="mode-toggle">
+            <button id="questionModeBtn" class="mode-btn active">❓ Question Mode</button>
+            <button id="numberModeBtn" class="mode-btn">🧮 Number Mode</button>
+        </div>
+
+        <!-- Question Mode -->
+        <div id="questionMode" class="calculation-form">
+            <h2>🌟 Answer Simple Questions</h2>
+            
+            <div class="question-card">
+                <h3>⚡ Power Plants (Electricity Usage)</h3>
+                <div class="button-group">
+                    <button class="choice-btn" data-category="electricity_q" data-value="low">
+                        <span class="icon">💡</span>
+                        <span class="label">Low</span>
+                        <span class="desc">~100 kWh/month</span>
+                    </button>
+                    <button class="choice-btn active" data-category="electricity_q" data-value="medium">
+                        <span class="icon">🏠</span>
+                        <span class="label">Medium</span>
+                        <span class="desc">~300 kWh/month</span>
+                    </button>
+                    <button class="choice-btn" data-category="electricity_q" data-value="high">
+                        <span class="icon">🏢</span>
+                        <span class="label">High</span>
+                        <span class="desc">~600 kWh/month</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h3>🚗 Transport</h3>
+                <div class="button-group">
+                    <button class="choice-btn" data-category="transport_q" data-value="walk">
+                        <span class="icon">🚶</span>
+                        <span class="label">Walk/Bike</span>
+                        <span class="desc">0 km/month</span>
+                    </button>
+                    <button class="choice-btn" data-category="transport_q" data-value="public">
+                        <span class="icon">🚌</span>
+                        <span class="label">Public Transit</span>
+                        <span class="desc">~300 km/month</span>
+                    </button>
+                    <button class="choice-btn active" data-category="transport_q" data-value="car">
+                        <span class="icon">🚗</span>
+                        <span class="label">Car</span>
+                        <span class="desc">~600 km/month</span>
+                    </button>
+                    <button class="choice-btn" data-category="transport_q" data-value="suv">
+                        <span class="icon">🚙</span>
+                        <span class="label">SUV</span>
+                        <span class="desc">~900 km/month</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h3>🏭 Industries</h3>
+                <div class="button-group">
+                    <button class="choice-btn" data-category="industries_q" data-value="low">
+                        <span class="icon">🌱</span>
+                        <span class="label">Low Impact</span>
+                        <span class="desc">Minimal consumption</span>
+                    </button>
+                    <button class="choice-btn active" data-category="industries_q" data-value="medium">
+                        <span class="icon">🏭</span>
+                        <span class="label">Medium Impact</span>
+                        <span class="desc">Average consumption</span>
+                    </button>
+                    <button class="choice-btn" data-category="industries_q" data-value="high">
+                        <span class="icon">🏢</span>
+                        <span class="label">High Impact</span>
+                        <span class="desc">Heavy consumption</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <h3>🗑️ Waste</h3>
+                <div class="button-group">
+                    <button class="choice-btn" data-category="waste_q" data-value="minimal">
+                        <span class="icon">♻️</span>
+                        <span class="label">Minimal</span>
+                        <span class="desc">~30 kg/month</span>
+                    </button>
+                    <button class="choice-btn active" data-category="waste_q" data-value="average">
+                        <span class="icon">🗑️</span>
+                        <span class="label">Average</span>
+                        <span class="desc">~60 kg/month</span>
+                    </button>
+                    <button class="choice-btn" data-category="waste_q" data-value="high">
+                        <span class="icon">🚮</span>
+                        <span class="label">High</span>
+                        <span class="desc">~100 kg/month</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Number Mode -->
+        <div id="numberMode" class="calculation-form" style="display:none;">
+            <h2>🔢 Enter Precise Numbers</h2>
+            
+            <div class="input-group">
+                <label>⚡ Power Plants (kWh/month)</label>
+                <input type="number" id="electricity_n" class="form-control" value="300" min="0">
+            </div>
+
+            <div class="input-group">
+                <label>🚗 Transport (km/month)</label>
+                <input type="number" id="transport_n" class="form-control" value="600" min="0">
+            </div>
+
+            <div class="input-group">
+                <label>🏭 Industries (kg CO2/month)</label>
+                <input type="number" id="industries_n" class="form-control" value="280" min="0">
+            </div>
+
+            <div class="input-group">
+                <label>🗑️ Waste (kg/month)</label>
+                <input type="number" id="waste_n" class="form-control" value="60" min="0">
+            </div>
+        </div>
+
+        <!-- Individual Calculation Options -->
+        <div class="individual-calc-section" style="background: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 12px; margin: 25px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <h3 style="color: #3A4A5C; margin-bottom: 15px;">📋 Calculate Individual Sections (Optional)</h3>
+            <p style="color: #5F6F81; margin-bottom: 15px; font-size: 0.95rem;">Select specific categories to calculate individually, or leave all unchecked to calculate everything:</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+                <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #E8F0F5; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#D8E8F0'" onmouseout="this.style.background='#E8F0F5'">
+                    <input type="checkbox" class="calc-checkbox" data-section="electricity" style="width: 18px; height: 18px; cursor: pointer;">
+                    <span style="color: #3A4A5C; font-weight: 500;">⚡ Power Plants Only</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #E8F0F5; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#D8E8F0'" onmouseout="this.style.background='#E8F0F5'">
+                    <input type="checkbox" class="calc-checkbox" data-section="transport" style="width: 18px; height: 18px; cursor: pointer;">
+                    <span style="color: #3A4A5C; font-weight: 500;">🚗 Transport Only</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #E8F0F5; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#D8E8F0'" onmouseout="this.style.background='#E8F0F5'">
+                    <input type="checkbox" class="calc-checkbox" data-section="industries" style="width: 18px; height: 18px; cursor: pointer;">
+                    <span style="color: #3A4A5C; font-weight: 500;">🏭 Industries Only</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #E8F0F5; border-radius: 8px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#D8E8F0'" onmouseout="this.style.background='#E8F0F5'">
+                    <input type="checkbox" class="calc-checkbox" data-section="waste" style="width: 18px; height: 18px; cursor: pointer;">
+                    <span style="color: #3A4A5C; font-weight: 500;">🗑️ Waste Only</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Calculate Button -->
+        <button id="calculateBtn" class="btn btn-primary btn-large">🌍 Calculate My Footprint</button>
+
+        <!-- Results Section -->
+        <div id="results" class="results-section" style="display:none;">
+            <div class="result-card">
+                <div class="eco-twin-emoji" id="ecoEmoji">🌿</div>
+                <h2>Your Carbon Footprint</h2>
+                <div class="co2-display">
+                    <span class="co2-value" id="co2Value">0</span>
+                    <span class="co2-unit">kg CO₂/month</span>
+                </div>
+                <div class="co2-tons">
+                    <span id="co2Tons">0</span> tons/year
+                </div>
+                <div class="category-badge" id="categoryBadge">Medium</div>
+                <p class="category-message" id="categoryMessage">Good job! Room for improvement.</p>
+                <p class="regional-note" id="regionalNote"></p>
+            </div>
+
+            <!-- Clean Emission Breakdown Graph -->
+            <div class="chart-container" style="margin-top: 2rem;">
+                <h3>📊 Your Carbon Footprint Breakdown</h3>
+                <canvas id="emissionsChart"></canvas>
+            </div>
+
+            <!-- New Calculation Button -->
+            <div style="text-align: center; margin-top: 2rem;">
+                <button id="newCalculationBtn" class="btn btn-secondary btn-large">🔄 New Calculation</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Eco Twin. Making the planet greener, one calculation at a time.</p>
+        </div>
+    </footer>
+
+    <script>
+        let userLat = null;
+        let userLon = null;
+        let map = null;
+        let emissionsChart = null;
+
+        // State Persistence Functions using sessionStorage
+        function saveCalculatorState(locationData, calculationResult) {
+            const state = {
+                timestamp: Date.now(),
+                location: {
+                    lat: userLat,
+                    lon: userLon,
+                    cityText: document.getElementById('cityText').textContent,
+                    weatherText: document.getElementById('weatherText').textContent,
+                    carbonIntensity: document.getElementById('carbonIntensity').textContent,
+                    intensitySource: document.getElementById('intensitySource').textContent,
+                    aqiText: document.getElementById('aqiText').textContent,
+                    aqiSource: document.getElementById('aqiSource').textContent
+                },
+                result: calculationResult
+            };
+            sessionStorage.setItem('ecoTwinCalculatorState', JSON.stringify(state));
+        }
+
+        function loadCalculatorState() {
+            const savedState = sessionStorage.getItem('ecoTwinCalculatorState');
+            if (!savedState) return false;
+
+            try {
+                const state = JSON.parse(savedState);
+                
+                // Restore location data
+                userLat = state.location.lat;
+                userLon = state.location.lon;
+                
+                document.getElementById('cityText').textContent = state.location.cityText;
+                document.getElementById('weatherText').textContent = state.location.weatherText;
+                document.getElementById('carbonIntensity').textContent = state.location.carbonIntensity;
+                document.getElementById('intensitySource').textContent = state.location.intensitySource;
+                document.getElementById('aqiText').textContent = state.location.aqiText;
+                document.getElementById('aqiSource').textContent = state.location.aqiSource;
+                
+                document.getElementById('locationInfo').style.display = 'block';
+                document.getElementById('getLocationBtn').innerHTML = '✅ Location Detected';
+                document.getElementById('getLocationBtn').disabled = true;
+                
+                // Restore map
+                document.getElementById('map').style.display = 'block';
+                if (!map) {
+                    map = L.map('map').setView([userLat, userLon], 13);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap'
+                    }).addTo(map);
+                    L.marker([userLat, userLon]).addTo(map)
+                        .bindPopup('Your Location')
+                        .openPopup();
+                }
+                
+                // Restore calculation results
+                displayResults(state.result);
+                
+                return true;
+            } catch (e) {
+                console.error('Failed to load saved state:', e);
+                sessionStorage.removeItem('ecoTwinCalculatorState');
+                return false;
+            }
+        }
+
+        function clearCalculatorState() {
+            sessionStorage.removeItem('ecoTwinCalculatorState');
+        }
+
+        // Load saved state on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            loadCalculatorState();
+        });
+
+        // Get Location Button
+        document.getElementById('getLocationBtn').addEventListener('click', function() {
+            if ("geolocation" in navigator) {
+                document.getElementById('getLocationBtn').innerHTML = '📍 Getting Location...';
+                navigator.geolocation.getCurrentPosition(
+                   async function(position) {
+                        userLat = position.coords.latitude;
+                     userLon = position.coords.longitude;
+                        
+                        // Fetch location name with full address
+                        fetch(`/api/geocode?lat=${userLat}&lon=${userLon}`)
+                            .then(res => res.json())
+                            .then(data => {
+                                document.getElementById('cityText').textContent = data.display;
+                            });
+
+                        // Fetch weather
+                        fetch(`/api/weather?lat=${userLat}&lon=${userLon}`)
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.temp) {
+                                    document.getElementById('weatherText').textContent = 
+                                        `${data.temp}°C, ${data.description}`;
+                                }
+                            });
+
+                        // Fetch emission intensity data
+                        fetch(`/api/emission-intensity?lat=${userLat}&lon=${userLon}`)
+                            .then(res => res.json())
+                            .then(data => {
+                                document.getElementById('carbonIntensity').textContent = data.carbon_intensity;
+                                document.getElementById('intensitySource').textContent = data.intensity_source;
+                                
+                                const aqiLabels = ['', 'Good', 'Fair', 'Moderate', 'Poor', 'Very Poor'];
+                                document.getElementById('aqiText').textContent = `${data.aqi} - ${aqiLabels[data.aqi] || 'Unknown'}`;
+                                document.getElementById('aqiSource').textContent = data.aqi_source;
+                            });
+
+                        document.getElementById('locationInfo').style.display = 'block';
+                        document.getElementById('getLocationBtn').innerHTML = '✅ Location Detected';
+                        document.getElementById('getLocationBtn').disabled = true;
+
+                        // Show map
+                        document.getElementById('map').style.display = 'block';
+                        if (!map) {
+                            map = L.map('map').setView([userLat, userLon], 13);
+                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                attribution: '© OpenStreetMap'
+                            }).addTo(map);
+                            L.marker([userLat, userLon]).addTo(map)
+                                .bindPopup('Your Location')
+                                .openPopup();
+                        }
+                    },
+                    function(error) {
+                        alert('🌍 Please enable GPS location access to use this calculator.\n\nThis app needs your location to provide accurate carbon footprint calculations based on your region\'s environmental data.');
+                        document.getElementById('getLocationBtn').innerHTML = '📍 Get My Location (Required)';
+                    }
+                );
+            } else {
+                alert('Geolocation is not supported by your browser.');
+            }
+        });
+
+        // Mode Toggle
+        document.getElementById('questionModeBtn').addEventListener('click', function() {
+            document.getElementById('questionMode').style.display = 'block';
+            document.getElementById('numberMode').style.display = 'none';
+            this.classList.add('active');
+            document.getElementById('numberModeBtn').classList.remove('active');
+        });
+
+        document.getElementById('numberModeBtn').addEventListener('click', function() {
+            document.getElementById('questionMode').style.display = 'none';
+            document.getElementById('numberMode').style.display = 'block';
+            this.classList.add('active');
+            document.getElementById('questionModeBtn').classList.remove('active');
+        });
+
+        // Choice Button Selection
+        document.querySelectorAll('.choice-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const category = this.dataset.category;
+                document.querySelectorAll(`[data-category="${category}"]`).forEach(b => {
+                    b.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+
+        // Calculate Button
+        document.getElementById('calculateBtn').addEventListener('click', function() {
+            if (!userLat || !userLon) {
+                alert('Please get your GPS location first!');
+                return;
+            }
+
+            // Clear old state when starting new calculation
+            clearCalculatorState();
+
+            const isQuestionMode = document.getElementById('questionMode').style.display !== 'none';
+            
+            // Check which individual sections are selected
+            const selectedSections = [];
+            document.querySelectorAll('.calc-checkbox:checked').forEach(cb => {
+                selectedSections.push(cb.dataset.section);
+            });
+            
+            let data = {
+                lat: userLat,
+                lon: userLon,
+                input_mode: isQuestionMode ? 'question' : 'number',
+                individual_sections: selectedSections.length > 0 ? selectedSections : null
+            };
+
+            if (isQuestionMode) {
+                data.electricity_q = document.querySelector('[data-category="electricity_q"].active').dataset.value;
+                data.transport_q = document.querySelector('[data-category="transport_q"].active').dataset.value;
+                data.industries_q = document.querySelector('[data-category="industries_q"].active').dataset.value;
+                data.waste_q = document.querySelector('[data-category="waste_q"].active').dataset.value;
+            } else {
+                data.electricity_n = document.getElementById('electricity_n').value;
+                data.transport_n = document.getElementById('transport_n').value;
+                data.industries_n = document.getElementById('industries_n').value;
+                data.waste_n = document.getElementById('waste_n').value;
+            }
+
+            fetch('/api/calculate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(result => {
+                displayResults(result);
+            })
+            .catch(error => {
+                alert('Calculation error: ' + error);
+            });
+        });
+
+        function displayResults(result) {
+            // Show results section
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+
+            // Update values
+            document.getElementById('co2Value').textContent = result.total_co2;
+            document.getElementById('co2Tons').textContent = (result.total_co2 * 12 / 1000).toFixed(2);
+
+            // Update category
+            const badge = document.getElementById('categoryBadge');
+            badge.className = 'category-badge ' + result.category;
+            badge.textContent = result.category.toUpperCase();
+
+            const card = document.querySelector('.result-card');
+            card.className = 'result-card ' + result.category + '-footprint';
+
+            // Update emoji
+            const emoji = document.getElementById('ecoEmoji');
+            if (result.category === 'low') {
+                emoji.textContent = '🌿';
+                document.getElementById('categoryMessage').textContent = 'Excellent! You\'re doing great!';
+            } else if (result.category === 'medium') {
+                emoji.textContent = '🌱';
+                document.getElementById('categoryMessage').textContent = 'Good job! Room for improvement.';
+            } else {
+                emoji.textContent = '🔥';
+                document.getElementById('categoryMessage').textContent = 'High footprint. Let\'s reduce it!';
+            }
+
+            // Update regional note
+            document.getElementById('regionalNote').textContent = 
+                `Based on ${result.location_display} (Emission factor: ${result.emission_factor} kg CO₂/kWh)`;
+
+            // Create single clean chart
+            const ctx = document.getElementById('emissionsChart').getContext('2d');
+            if (window.emissionsChartInstance) {
+                window.emissionsChartInstance.destroy();
+            }
+
+            window.emissionsChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Power Plants', 'Transport', 'Industries', 'Waste'],
+                    datasets: [{
+                        label: 'kg CO₂/month',
+                        data: [result.electricity, result.transport, result.diet, result.waste],
+                        backgroundColor: [
+                            '#A8E6CF',
+                            '#FFD97D',
+                            '#FFB3BA',
+                            '#BFACE2'
+                        ],
+                        borderColor: [
+                            '#81D4A1',
+                            '#FFC850',
+                            '#FF8A92',
+                            '#9E7BB5'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const total = result.total_co2;
+                                    const value = context.parsed.y;
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return `${value} kg CO₂ (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'kg CO₂/month'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Save state after displaying results
+            saveCalculatorState(null, result);
+        }
+
+        // New Calculation Button - Clear session and reset form
+        document.getElementById('newCalculationBtn').addEventListener('click', function() {
+            if (confirm('Start a new calculation? This will clear your current results.')) {
+                // Clear sessionStorage
+                clearCalculatorState();
+                
+                // Hide results section
+                document.getElementById('results').style.display = 'none';
+                
+                // Reset location button
+                document.getElementById('getLocationBtn').innerHTML = '📍 Get My Location (Required)';
+                document.getElementById('getLocationBtn').disabled = false;
+                document.getElementById('locationInfo').style.display = 'none';
+                document.getElementById('map').style.display = 'none';
+                
+                // Clear map
+                if (map) {
+                    map.remove();
+                    map = null;
+                }
+                
+                // Reset location data
+                userLat = null;
+                userLon = null;
+                
+                // Reset chart
+                if (window.emissionsChartInstance) {
+                    window.emissionsChartInstance.destroy();
+                    window.emissionsChartInstance = null;
+                }
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>

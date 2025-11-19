@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Eco Twin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1>🌍 Eco Twin</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Home</a></li>
+                <li><a href="/calculator">Calculator</a></li>
+                <li><a href="/profile" class="active">Profile</a></li>
+                <li><a href="/suggestions">Suggestions</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container" style="padding: 2rem 1.5rem;">
+        <h1 class="page-title" style="margin-bottom: 2.5rem;">🌟 Your Eco Twin Profile</h1>
+
+        <!-- Eco Twin & Tree Animation Section -->
+        <div style="display: flex; justify-content: center; align-items: stretch; gap: 2rem; margin-bottom: 3rem; flex-wrap: wrap;">
+            <!-- Eco Twin Avatar Box -->
+            <div class="animation-box" style="background: rgba(255, 255, 255, 0.95); padding: 2rem; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); flex: 1; min-width: 250px; max-width: 350px; text-align: center;">
+                <h3 style="margin-bottom: 1.5rem; color: var(--text-dark); font-size: 1.2rem;">🌟 Your Eco Twin</h3>
+                <div class="eco-twin-animation-container" style="position: relative; width: 100%; height: 250px; margin: 0 auto;">
+                    <img id="ecoTwinImage" src="{{ url_for('static', filename='images/eco-twin-medium.jpg') }}" alt="Eco Twin Capsule" style="width: 100%; height: 100%; object-fit: cover; border-radius: 15px;" />
+                </div>
+                <p id="ecoTwinMessage" style="text-align: center; margin-top: 1rem; font-size: 1rem; color: var(--text-dark); font-weight: 600; line-height: 1.6;"></p>
+            </div>
+            
+            <!-- Tree Growth Box -->
+            <div class="animation-box" style="background: rgba(255, 255, 255, 0.95); padding: 2rem; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); flex: 1; min-width: 250px; max-width: 350px; text-align: center;">
+                <h3 style="margin-bottom: 1.5rem; color: var(--text-dark); font-size: 1.2rem;">🌳 Your Eco Tree</h3>
+                <div class="tree-growth-container" style="position: relative; width: 200px; height: 250px; margin: 0 auto; overflow: visible; border-radius: 15px; background: linear-gradient(to bottom, #e3f2fd 0%, #c8e6c9 100%); display: flex; align-items: flex-end; justify-content: center;">
+                    <div id="cssTree" class="css-tree-container" style="width: 100%; height: 100%; position: relative; display: flex; align-items: flex-end; justify-content: center;">
+                        <div class="tree-soil tree-stage-1" id="treeSoil"></div>
+                        <div class="tree-trunk tree-stage-1" id="treeTrunk"></div>
+                        <div class="tree-canopy tree-stage-1" id="treeCanopy"></div>
+                    </div>
+                </div>
+                <p style="text-align: center; margin-top: 1rem; font-size: 1rem; color: var(--text-dark); font-weight: 600;">Stage <span id="treeStageDisplay">1</span> / 5 | Level <span id="treeLevelDisplay">1</span></p>
+                <p id="treeLevelMessage" style="text-align: center; margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light); font-style: italic;"></p>
+            </div>
+        </div>
+
+        <!-- Celebration Effect Container -->
+        <div id="celebrationEffect" class="celebration-container"></div>
+
+        <!-- User Stats Dashboard -->
+        <div class="stats-dashboard" style="background: rgba(255, 255, 255, 0.95); padding: 2.5rem; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); margin-bottom: 3rem;">
+            <h2 style="margin-bottom: 2rem; text-align: center; color: var(--text-dark);">📊 Your Eco Stats</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                <div class="stat-card" style="background: linear-gradient(135deg, var(--pastel-mint), var(--pastel-blue)); padding: 1.5rem; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🏆</div>
+                    <div style="font-size: 2rem; font-weight: bold; color: var(--text-dark);" id="totalPoints">0</div>
+                    <div style="color: var(--text-light); font-weight: 500;">Total Points</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, var(--pastel-yellow), var(--pastel-peach)); padding: 1.5rem; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">😊</div>
+                    <div style="font-size: 2rem; font-weight: bold; color: var(--text-dark);" id="happiness">50</div>
+                    <div style="color: var(--text-light); font-weight: 500;">Eco Twin Happiness</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, var(--pastel-blue), var(--pastel-lavender)); padding: 1.5rem; border-radius: 15px; text-align: center;">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📈</div>
+                    <div style="font-size: 2rem; font-weight: bold; color: var(--text-dark);" id="totalCalculations">0</div>
+                    <div style="color: var(--text-light); font-weight: 500;">Total Calculations</div>
+                </div>
+            </div>
+
+            <!-- Monthly Dashboard -->
+            <div style="margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 100%); border-radius: 15px; border-left: 4px solid #4CAF50;">
+                <h3 style="margin-bottom: 1.5rem; color: #2E7D32; text-align: center; font-size: 1.4rem;">📅 This Month's Carbon Footprint</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem;">
+                    <div style="background: white; padding: 1rem; border-radius: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                        <div style="font-size: 1.8rem; margin-bottom: 0.3rem;">🌍</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #2E7D32;" id="monthlyTotal">0</div>
+                        <div style="color: #666; font-size: 0.85rem; margin-top: 0.2rem;">kg CO₂</div>
+                        <div style="color: #999; font-size: 0.75rem;">Total</div>
+                    </div>
+                    <div style="background: white; padding: 1rem; border-radius: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                        <div style="font-size: 1.8rem; margin-bottom: 0.3rem;">⚡</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #F57C00;" id="monthlyPowerPlants">0</div>
+                        <div style="color: #666; font-size: 0.85rem; margin-top: 0.2rem;">kg CO₂</div>
+                        <div style="color: #999; font-size: 0.75rem;">Power Plants</div>
+                    </div>
+                    <div style="background: white; padding: 1rem; border-radius: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                        <div style="font-size: 1.8rem; margin-bottom: 0.3rem;">🚗</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #1976D2;" id="monthlyTransport">0</div>
+                        <div style="color: #666; font-size: 0.85rem; margin-top: 0.2rem;">kg CO₂</div>
+                        <div style="color: #999; font-size: 0.75rem;">Transport</div>
+                    </div>
+                    <div style="background: white; padding: 1rem; border-radius: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                        <div style="font-size: 1.8rem; margin-bottom: 0.3rem;">🏭</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #7B1FA2;" id="monthlyIndustries">0</div>
+                        <div style="color: #666; font-size: 0.85rem; margin-top: 0.2rem;">kg CO₂</div>
+                        <div style="color: #999; font-size: 0.75rem;">Industries</div>
+                    </div>
+                    <div style="background: white; padding: 1rem; border-radius: 10px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                        <div style="font-size: 1.8rem; margin-bottom: 0.3rem;">🗑️</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #C62828;" id="monthlyWaste">0</div>
+                        <div style="color: #666; font-size: 0.85rem; margin-top: 0.2rem;">kg CO₂</div>
+                        <div style="color: #999; font-size: 0.75rem;">Waste</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carbon Footprint Progress Chart -->
+        <div class="chart-container" style="background: rgba(255, 255, 255, 0.95); padding: 2.5rem; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); margin-bottom: 3rem;">
+            <h2 style="margin-bottom: 2rem; text-align: center; color: var(--text-dark);">📉 Your Carbon Footprint Progress</h2>
+            <canvas id="progressChart"></canvas>
+        </div>
+
+        <!-- Calculation History -->
+        <div class="history-section" style="background: rgba(255, 255, 255, 0.95); padding: 2.5rem; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
+            <h2 style="margin-bottom: 2rem; text-align: center; color: var(--text-dark);">📜 Calculation History</h2>
+            <div id="historyTableContainer" style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: linear-gradient(135deg, var(--pastel-mint), var(--pastel-blue)); color: var(--text-dark);">
+                            <th style="padding: 1rem; text-align: left; border-radius: 10px 0 0 0;">Date</th>
+                            <th style="padding: 1rem; text-align: center;">Total CO₂</th>
+                            <th style="padding: 1rem; text-align: center;">Category</th>
+                            <th style="padding: 1rem; text-align: center;">Location</th>
+                            <th style="padding: 1rem; text-align: center; border-radius: 0 10px 0 0;">Mode</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                        <tr>
+                            <td colspan="5" style="padding: 2rem; text-align: center; color: var(--text-light);">Loading your history...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Eco Twin. Making the planet greener, one calculation at a time.</p>
+        </div>
+    </footer>
+
+    <script>
+        let userFootprint = 'medium';
+        let latestCO2 = 0;
+
+        // Fetch profile data
+        async function loadProfileData() {
+            try {
+                // Fetch user stats
+                const statsRes = await fetch('/api/profile/stats');
+                const stats = await statsRes.json();
+                
+                document.getElementById('totalPoints').textContent = stats.total_points;
+                document.getElementById('happiness').textContent = stats.eco_twin_happiness;
+                document.getElementById('totalCalculations').textContent = stats.total_calculations;
+
+                // Fetch latest calculation to determine footprint
+                const latestRes = await fetch('/api/profile/latest');
+                const latest = await latestRes.json();
+                
+                if (latest.category) {
+                    userFootprint = latest.category;
+                    latestCO2 = latest.total_co2 || 0;
+                }
+
+                updateEcoTwinAnimation(userFootprint, latestCO2);
+                updateTreeGrowth(stats.current_tree_stage || 1, stats.tree_level, userFootprint);
+
+                if (userFootprint === 'low') {
+                    setTimeout(() => showCelebration(), 800);
+                }
+
+                // Fetch history
+                const historyRes = await fetch('/api/profile/history');
+                const history = await historyRes.json();
+                renderHistory(history);
+                renderProgressChart(history);
+
+                // Fetch monthly statistics
+                const monthlyRes = await fetch('/api/profile/monthly-stats');
+                const monthlyStats = await monthlyRes.json();
+                displayMonthlyStats(monthlyStats);
+
+            } catch (error) {
+                console.error('Error loading profile:', error);
+            }
+        }
+
+        function displayMonthlyStats(stats) {
+            if (!stats) {
+                console.error('No monthly stats data available');
+                return;
+            }
+            document.getElementById('monthlyTotal').textContent = Math.round(stats.total_co2 || 0);
+            document.getElementById('monthlyPowerPlants').textContent = Math.round(stats.electricity || 0);
+            document.getElementById('monthlyTransport').textContent = Math.round(stats.transport || 0);
+            document.getElementById('monthlyIndustries').textContent = Math.round(stats.industries || 0);
+            document.getElementById('monthlyWaste').textContent = Math.round(stats.waste || 0);
+        }
+
+        function updateEcoTwinAnimation(footprint, co2Value) {
+            const ecoTwinImage = document.getElementById('ecoTwinImage');
+            const message = document.getElementById('ecoTwinMessage');
+            
+            if (footprint === 'low') {
+                ecoTwinImage.src = "{{ url_for('static', filename='images/eco-twin-low.jpg') }}";
+                message.textContent = '🌱 Your Eco Twin is thriving in a clean, green environment!';
+                message.style.color = '#2E7D32';
+            } else if (footprint === 'medium') {
+                ecoTwinImage.src = "{{ url_for('static', filename='images/eco-twin-medium.jpg') }}";
+                message.textContent = '⚠️ Your Eco Twin needs improvement. Let\'s work together to reduce emissions!';
+                message.style.color = '#F57C00';
+            } else {
+                ecoTwinImage.src = "{{ url_for('static', filename='images/eco-twin-high.jpg') }}";
+                message.textContent = '🚨 Your Eco Twin is in a polluted environment. Time to take action and reduce your footprint!';
+                message.style.color = '#C62828';
+            }
+        }
+
+        function updateTreeGrowth(treeStage, treeLevel, footprint) {
+            const treeTrunk = document.getElementById('treeTrunk');
+            const treeCanopy = document.getElementById('treeCanopy');
+            const treeSoil = document.getElementById('treeSoil');
+            const stageDisplay = document.getElementById('treeStageDisplay');
+            const levelDisplay = document.getElementById('treeLevelDisplay');
+            const levelMessage = document.getElementById('treeLevelMessage');
+            
+            const stage = Math.min(Math.max(treeStage, 1), 5);
+            const level = Math.min(Math.max(treeLevel, 1), 100);
+            
+            stageDisplay.textContent = stage;
+            levelDisplay.textContent = level;
+            
+            const stageMessages = {
+                1: '🌱 Tiny seedling! Reduce emissions to help it grow.',
+                2: '🌿 Small sprout! Keep going!',
+                3: '🌳 Young sapling! You\'re making progress.',
+                4: '🌲 Growing tree! Almost there!',
+                5: '🌳 Full-grown tree! Amazing work! Complete 5 stages to level up! 🎉'
+            };
+            
+            treeTrunk.className = 'tree-trunk tree-stage-' + stage;
+            treeCanopy.className = 'tree-canopy tree-stage-' + stage;
+            treeSoil.className = 'tree-soil tree-stage-' + stage;
+            
+            levelMessage.textContent = stageMessages[stage];
+            levelMessage.style.color = stage >= 4 ? '#2E7D32' : '#666';
+        }
+
+        function showCelebration() {
+            const container = document.getElementById('celebrationEffect');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < 10; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'celebration-sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 0.5 + 's';
+                container.appendChild(sparkle);
+            }
+            
+            for (let i = 0; i < 5; i++) {
+                const leaf = document.createElement('div');
+                leaf.className = 'falling-leaf';
+                leaf.style.left = Math.random() * 100 + '%';
+                leaf.style.animationDelay = Math.random() * 1 + 's';
+                container.appendChild(leaf);
+            }
+            
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 3000);
+        }
+
+        window.showCelebration = showCelebration;
+
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'celebrationTrigger' && e.newValue === 'true') {
+                showCelebration();
+                localStorage.removeItem('celebrationTrigger');
+            }
+        });
+
+
+        // Render calculation history
+        function renderHistory(history) {
+            const tbody = document.getElementById('historyTableBody');
+            tbody.innerHTML = '';
+            
+            if (history.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="padding: 2rem; text-align: center; color: var(--text-light);">No calculations yet. Visit the calculator to get started!</td></tr>';
+                return;
+            }
+            
+            history.forEach(calc => {
+                const tr = document.createElement('tr');
+                tr.style.borderBottom = '1px solid #E0E0E0';
+                tr.innerHTML = `
+                    <td style="padding: 1rem;">${new Date(calc.calculated_at).toLocaleDateString()}</td>
+                    <td style="padding: 1rem; text-align: center; font-weight: 600;">${calc.total_co2} kg</td>
+                    <td style="padding: 1rem; text-align: center;">
+                        <span class="category-badge ${calc.category}" style="padding: 4px 12px; font-size: 0.8rem;">${calc.category.toUpperCase()}</span>
+                    </td>
+                    <td style="padding: 1rem; text-align: center;">${calc.city_name || 'Unknown'}</td>
+                    <td style="padding: 1rem; text-align: center;">${calc.input_mode === 'question' ? '❓ Question' : '🧮 Number'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Render progress chart
+        function renderProgressChart(history) {
+            if (history.length === 0) return;
+            
+            const ctx = document.getElementById('progressChart').getContext('2d');
+            const labels = history.map(h => new Date(h.calculated_at).toLocaleDateString()).reverse();
+            const data = history.map(h => h.total_co2).reverse();
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'CO₂ Emissions (kg/month)',
+                        data: data,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'kg CO₂/month'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load profile data on page load
+        loadProfileData();
+    </script>
+</body>
+</html>
