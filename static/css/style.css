@@ -1259,177 +1259,246 @@ body {
     }
 }
 
+@keyframes leafGrow {
+    0%, 100% {
+        transform: translateX(-50%) scale(1);
+    }
+    50% {
+        transform: translateX(-50%) scale(1.05);
+    }
+}
+
+@keyframes sparkleFloat {
+    0%, 100% {
+        transform: translateX(-50%) translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        transform: translateX(-50%) translateY(-8px) rotate(180deg);
+        opacity: 0.6;
+    }
+}
+
 /* TREE STAGES (5 growth stages within each tree level) */
-/* Stage 1: Tiny Seedling */
+/* Stage 1: Tiny Seedling - Enhanced Design */
 .tree-stage-1.tree-trunk {
-    width: 4px;
-    height: 18px;
-    background: linear-gradient(180deg, #A1887F 0%, #8D6E63 100%);
+    width: 5px;
+    height: 22px;
+    background: linear-gradient(180deg, #8BC34A 0%, #7CB342 50%, #689F38 100%);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2), inset 1px 0 2px rgba(255,255,255,0.3);
+    border-radius: 2px;
 }
 
 .tree-stage-1.tree-canopy {
-    width: 30px;
-    height: 25px;
-    bottom: 12px;
+    width: 35px;
+    height: 35px;
+    bottom: 15px;
     opacity: 1;
-    background: transparent;
+    background: radial-gradient(circle at 30% 30%, #81C784, #66BB6A, #4CAF50);
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15),
+                -8px 2px 0 4px rgba(102, 187, 106, 0.6),
+                8px 2px 0 4px rgba(102, 187, 106, 0.6);
+    animation: leafGrow 2s ease-in-out infinite;
 }
 
 .tree-stage-1.tree-canopy::before {
-    content: '🌱';
+    content: '✨';
     position: absolute;
     left: 50%;
-    top: -5px;
+    top: -15px;
     transform: translateX(-50%);
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+    animation: sparkleFloat 2s ease-in-out infinite;
 }
 
 .tree-stage-1.tree-soil {
-    width: 80px;
-    opacity: 0.8;
+    width: 90px;
+    height: 16px;
+    opacity: 0.85;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
-/* Stage 2: Small Sprout */
+/* Stage 2: Small Sprout - Enhanced */
 .tree-stage-2.tree-trunk {
-    width: 10px;
-    height: 40px;
-    background: linear-gradient(180deg, #A1887F 0%, #8D6E63 100%);
+    width: 12px;
+    height: 48px;
+    background: linear-gradient(180deg, #8D6E63 0%, #6D4C41 50%, #5D4037 100%);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2), inset 2px 0 3px rgba(255,255,255,0.2);
+    border-radius: 3px;
 }
 
 .tree-stage-2.tree-canopy {
-    width: 50px;
-    height: 50px;
-    bottom: 35px;
+    width: 60px;
+    height: 60px;
+    bottom: 42px;
     opacity: 1;
-    background: radial-gradient(circle, #81C784 0%, #66BB6A 100%);
+    background: radial-gradient(circle at 35% 25%, #8BC34A, #66BB6A, #4CAF50);
+    border-radius: 50%;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.18),
+                -12px 4px 0 6px rgba(102, 187, 106, 0.65),
+                12px 4px 0 6px rgba(102, 187, 106, 0.65),
+                0 -6px 0 4px rgba(129, 199, 132, 0.5);
+    animation: leafGrow 2.2s ease-in-out infinite;
 }
 
 .tree-stage-2.tree-canopy::before {
     content: '🦋';
     position: absolute;
-    right: -25px;
-    top: -5px;
-    font-size: 1.2rem;
+    right: -28px;
+    top: -8px;
+    font-size: 1.3rem;
     animation: butterflyFlutter 3s ease-in-out infinite;
 }
 
 .tree-stage-2.tree-soil {
-    width: 85px;
+    width: 95px;
+    height: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
-/* Stage 3: Young Sapling */
+/* Stage 3: Young Sapling - Enhanced */
 .tree-stage-3.tree-trunk {
-    width: 16px;
-    height: 65px;
+    width: 18px;
+    height: 75px;
+    background: linear-gradient(180deg, #8D6E63 0%, #6D4C41 40%, #5D4037 100%);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.25), 
+                inset 2px 0 4px rgba(255,255,255,0.2),
+                inset -2px 0 4px rgba(0,0,0,0.1);
+    border-radius: 4px;
 }
 
 .tree-stage-3.tree-canopy {
-    width: 75px;
-    height: 75px;
-    bottom: 60px;
+    width: 90px;
+    height: 90px;
+    bottom: 68px;
     opacity: 1;
-    background: radial-gradient(circle, #66BB6A 0%, #4CAF50 100%);
-    box-shadow: -14px 6px 0 10px rgba(102, 187, 106, 0.7),
-                14px 6px 0 10px rgba(102, 187, 106, 0.7);
-    animation: gentleTreeSway 4.5s ease-in-out infinite;
+    background: radial-gradient(circle at 30% 20%, #66BB6A, #4CAF50, #388E3C);
+    border-radius: 50%;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2),
+                -16px 8px 0 12px rgba(76, 175, 80, 0.7),
+                16px 8px 0 12px rgba(76, 175, 80, 0.7),
+                0 -10px 0 8px rgba(102, 187, 106, 0.6);
+    animation: gentleTreeSway 4s ease-in-out infinite;
 }
 
 .tree-stage-3.tree-canopy::after {
     content: '🦋';
     position: absolute;
-    right: -30px;
-    top: 5px;
-    font-size: 1.3rem;
+    right: -32px;
+    top: 2px;
+    font-size: 1.4rem;
     animation: butterflyFlutter 2.8s ease-in-out infinite;
 }
 
 .tree-stage-3.tree-soil {
-    width: 95px;
+    width: 105px;
+    height: 17px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
 }
 
-/* Stage 4: Growing Tree */
+/* Stage 4: Growing Tree - Enhanced */
 .tree-stage-4.tree-trunk {
-    width: 22px;
-    height: 95px;
+    width: 24px;
+    height: 105px;
+    background: linear-gradient(180deg, #8D6E63 0%, #6D4C41 35%, #5D4037 70%, #4E342E 100%);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3), 
+                inset 3px 0 5px rgba(255,255,255,0.15),
+                inset -3px 0 5px rgba(0,0,0,0.15);
+    border-radius: 5px;
 }
 
 .tree-stage-4.tree-canopy {
-    width: 110px;
-    height: 110px;
-    bottom: 90px;
+    width: 120px;
+    height: 120px;
+    bottom: 98px;
     opacity: 1;
-    background: radial-gradient(circle, #4CAF50 0%, #388E3C 100%);
-    box-shadow: -20px 10px 0 16px rgba(76, 175, 80, 0.75),
-                20px 10px 0 16px rgba(76, 175, 80, 0.75),
-                0 -12px 0 12px rgba(102, 187, 106, 0.65);
-    animation: gentleTreeSway 4s ease-in-out infinite;
+    background: radial-gradient(circle at 28% 18%, #4CAF50, #388E3C, #2E7D32);
+    border-radius: 50%;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.25),
+                -22px 12px 0 18px rgba(56, 142, 60, 0.75),
+                22px 12px 0 18px rgba(56, 142, 60, 0.75),
+                0 -14px 0 14px rgba(76, 175, 80, 0.65),
+                -12px -6px 0 8px rgba(102, 187, 106, 0.55),
+                12px -6px 0 8px rgba(102, 187, 106, 0.55);
+    animation: gentleTreeSway 3.8s ease-in-out infinite;
 }
 
 .tree-stage-4.tree-canopy::before {
     content: '🐦';
     position: absolute;
-    left: -38px;
-    top: -12px;
-    font-size: 1.5rem;
+    left: -40px;
+    top: -14px;
+    font-size: 1.6rem;
     animation: birdHop 2.2s ease-in-out infinite;
 }
 
 .tree-stage-4.tree-canopy::after {
     content: '🦋';
     position: absolute;
-    right: -38px;
-    top: 8px;
-    font-size: 1.4rem;
+    right: -40px;
+    top: 6px;
+    font-size: 1.5rem;
     animation: butterflyFlutter 2.9s ease-in-out infinite;
 }
 
 .tree-stage-4.tree-soil {
-    width: 115px;
+    width: 125px;
+    height: 18px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
-/* Stage 5: Full-Grown Majestic Tree */
+/* Stage 5: Full-Grown Majestic Tree - Enhanced */
 .tree-stage-5.tree-trunk {
-    width: 30px;
-    height: 135px;
-    background: linear-gradient(180deg, #8D6E63 0%, #6D4C41 50%, #5D4037 100%);
+    width: 32px;
+    height: 150px;
+    background: linear-gradient(180deg, #8D6E63 0%, #6D4C41 30%, #5D4037 65%, #4E342E 100%);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.35), 
+                inset 4px 0 6px rgba(255,255,255,0.12),
+                inset -4px 0 6px rgba(0,0,0,0.2);
+    border-radius: 6px;
 }
 
 .tree-stage-5.tree-canopy {
-    width: 145px;
-    height: 145px;
-    bottom: 130px;
+    width: 160px;
+    height: 160px;
+    bottom: 142px;
     opacity: 1;
-    background: radial-gradient(circle, #2E7D32 0%, #1B5E20 100%);
-    box-shadow: -24px 14px 0 20px rgba(46, 125, 50, 0.85),
-                24px 14px 0 20px rgba(46, 125, 50, 0.85),
-                0 -15px 0 16px rgba(56, 142, 60, 0.75),
-                -18px -7px 0 12px rgba(76, 175, 80, 0.65),
-                18px -7px 0 12px rgba(76, 175, 80, 0.65),
-                0 -26px 0 10px rgba(102, 187, 106, 0.5);
-    animation: treeThrive 4s ease-in-out infinite;
+    background: radial-gradient(circle at 25% 15%, #2E7D32, #1B5E20, #0D4A1C);
+    border-radius: 50%;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.3),
+                -28px 16px 0 24px rgba(46, 125, 50, 0.85),
+                28px 16px 0 24px rgba(46, 125, 50, 0.85),
+                0 -18px 0 18px rgba(56, 142, 60, 0.75),
+                -20px -10px 0 14px rgba(76, 175, 80, 0.65),
+                20px -10px 0 14px rgba(76, 175, 80, 0.65),
+                0 -30px 0 12px rgba(102, 187, 106, 0.5);
+    animation: treeThrive 3.5s ease-in-out infinite;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
 }
 
 .tree-stage-5.tree-canopy::before {
     content: '🐦';
     position: absolute;
-    left: -43px;
-    top: -18px;
-    font-size: 1.6rem;
+    left: -46px;
+    top: -20px;
+    font-size: 1.7rem;
     animation: birdHop 2s ease-in-out infinite;
 }
 
 .tree-stage-5.tree-canopy::after {
     content: '🦋';
     position: absolute;
-    right: -43px;
-    top: 6px;
-    font-size: 1.5rem;
+    right: -46px;
+    top: 4px;
+    font-size: 1.6rem;
     animation: butterflyFlutter 3.1s ease-in-out infinite;
 }
 
 .tree-stage-5.tree-soil {
-    width: 135px;
-    height: 18px;
+    width: 150px;
+    height: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
 }
 
 /* PROFILE PAGE: Celebration Effects */
