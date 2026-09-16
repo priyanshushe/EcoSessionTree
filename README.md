@@ -1,497 +1,605 @@
-## 🌍 Eco Twin
+::: {align="center"}
 
-A location-aware carbon footprint calculator that turns everyday environmental data into an interactive personal Eco Twin experience.
+🌱 EcoSessionTree
 
-Eco Twin is a Flask-based web application for estimating monthly CO₂ emissions across electricity, transportation, industrial/consumption impact, and waste. It combines GPS-based regional information, configurable emission factors, visual analytics, calculation history, and gamification to make carbon tracking more engaging.
+Turn everyday activities into a measurable carbon footprint --- and grow your Eco Twin.
 
-The application provides two ways to calculate a footprint:
+A location-aware Flask web application that estimates monthly CO₂
+emissions, visualizes environmental impact, and uses gamification
+to encourage more sustainable choices.
 
-**Question Mode** – answer simple qualitative questions and let the application use predefined monthly activity estimates.
+<br>{=html}
 
-**Number Mode** – enter numerical monthly values for more direct control over the calculation.
 
-After each calculation, Eco Twin stores the result locally in SQLite, awards points, updates the user's tree progression, and makes the result available on the profile dashboard.
 
-## ✨ Features
+
+
+
+:::
+
+📌 Table of Contents
+
+Overview
+
+Key Features
+
+How It Works
+
+Carbon Calculation
+
+Gamification
+
+Technology Stack
+
+Application Architecture
+
+Project Structure
+
+Application Routes
+
+API Reference
+
+Database Design
+
+External Services
+
+Environment Variables
+
+Local Installation
+
+Running on Replit
+
+Security Notes
+
+Current Scope & Limitations
+
+Future Enhancements
+
+License
+
+🌍 Overview
+
+EcoSessionTree is a sustainability-focused web application designed
+to help users understand the environmental impact of everyday
+activities.
+
+The application estimates a user's monthly carbon footprint across four
+areas:
+
+⚡ Electricity
+
+🚗 Transport
+
+🏭 Industries / Consumption
+
+🗑️ Waste
+
+Users can either answer simple lifestyle questions or enter numerical
+values directly. The application then calculates the estimated
+footprint, classifies the result as Low, Medium, or High,
+stores the calculation in SQLite, and updates an interactive Eco
+Twin progression system.
+
+The project combines:
+
+Carbon tracking + location awareness + environmental information +
+analytics + gamification
+
+✨ Key Features
 
 🌱 Carbon Footprint Calculator
 
-Calculates estimated monthly CO₂ emissions in kg CO₂/month.
+Estimates monthly CO₂ emissions in kg CO₂/month.
 
-Also displays the equivalent annual value in tonnes CO₂/year.
+Displays the annual equivalent in tonnes CO₂/year.
 
-**Breaks emissions into four categories:**
+Provides a category-wise emission breakdown.
 
-⚡ Electricity
-🚗 Transport
-🏭 Industries / consumption impact
-🗑️ Waste
+Classifies the footprint as Low, Medium, or High.
 
-**Classifies the result as Low, Medium, or High.**
+Uses the highest-severity category as the overall footprint
+classification.
 
-Uses the highest category among the four sections as the overall footprint category.
+❓ Question Mode
 
-## ❓ Question Mode
+Designed for users who do not know their exact monthly consumption.
 
-Designed for users who do not know their exact monthly figures.
-The application converts simple choices into predefined activity estimates:
+Users answer qualitative questions such as:
 
-## Category
+Electricity usage level
 
-Low / Minimal
-Medium / Average
-High
+Primary transport type
+
+Industrial/consumption impact
+
+Waste generation level
+
+The application converts these selections into predefined monthly
+activity estimates.
+
+🔢 Number Mode
+
+For users who know their approximate consumption, the application
+accepts numerical monthly values for:
+
+Electricity --- kWh/month
+
+Transport --- km/month
+
+Industries / consumption --- kg CO₂/month
+
+Waste --- kg/month
+
+📍 Location Awareness
+
+The browser's Geolocation API is used to obtain latitude and
+longitude.
+
+The coordinates can then be used for:
+
+Reverse geocoding
+
+Regional electricity emission factors
+
+Map visualization
+
+Weather information
+
+Air-quality information
+
+🗺️ Interactive Map
+
+The calculator uses Leaflet.js with OpenStreetMap tiles to
+display the detected location.
+
+🌤️ Weather & AQI
+
+When an OpenWeather API key is configured, the application can retrieve:
+
+Temperature
+
+Weather description
+
+Humidity
+
+Wind speed
+
+Air Quality Index
+
+Fallback values are used when the API key is unavailable, so the core
+calculator can still operate.
+
+📊 Profile Dashboard
+
+The profile dashboard presents:
+
+Total points
+
+Eco Twin happiness
+
+Total calculations
+
+Tree level and stage
+
+Latest footprint category
+
+Monthly emissions
+
+Category-wise emissions
+
+Historical footprint chart
+
+Recent calculation history
+
+🌳 Gamification
+
+The application turns sustainability tracking into a progression system:
+
+Saved calculations award points.
+
+Completed eco-actions award additional points.
+
+Eco Twin happiness increases after completed actions.
+
+Low-emission results can advance the tree.
+
+High-emission results can reduce the tree stage.
+
+Completing all five stages advances the tree level.
+
+💡 Eco Suggestions
+
+Users can browse recommendations related to:
+
 Electricity
-100 kWh/month
-300 kWh/month
-600 kWh/month
 
-## Transport
+Transportation
 
-0 km/month
-Depends on selected transport
-Industries
-120 kg CO₂/month
-280 kg CO₂/month
-580 kg CO₂/month
+Industries / consumption
 
-## Waste
-30 kg/month
-60 kg/month
-100 kg/month
+Waste
 
-## For transport, the qualitative choices include walking/biking, public transit, car, and SUV.
+Actions can be marked as completed to earn points.
 
-## 🔢 Number Mode
+🌿 Eco Events & Workshops
 
-**Allows users to directly enter:**
-- Electricity consumption in kWh/month
-- Transport distance in km/month
-- Industrial/consumption emissions in kg CO₂/month
-
-## Waste generated in kg/month
-
-## 📍 GPS-Based Location Awareness
-
-- The calculator uses the browser's Geolocation API to obtain the user's coordinates.
-
-## Those coordinates are then used to:
-
-- Reverse-geocode the location into a city/state/country.
-- Select a regional electricity emission factor.
-- Display the user's location on an interactive map.
-- Retrieve optional weather information.
-- Retrieve air-quality information.
-
-## Location data is required by the calculator interface because the electricity calculation can vary by region.
-
-## 🗺️ Interactive Maps
-- The calculator uses Leaflet.js and OpenStreetMap tiles to display the detected location.
-- The Suggestions page also provides category-based eco-friendly location cards with Google Maps directions generated from the user's current coordinates.
-- The nearby eco-friendly locations shown by the Suggestions page are application-defined example locations relative to the user's coordinates; they are not retrieved from a live places database.
-
-## 🌤️ Weather & Air Quality
-**When an OPENWEATHER_API_KEY is configured, Eco Twin can display:**
-- Current temperature
-- Weather description
-- Humidity
-- Wind speed
-- Air Quality Index (AQI)
-
-## The application continues to work without the API key. In that case it uses fallback values for weather/AQI display.
-
-## 📊 Profile Dashboard
-
-**The Profile page provides:**
-- Total points
-- Eco Twin happiness score
-- Total number of calculations
-- Current tree stage
-- Current tree level
-- Latest footprint category
-- Monthly emissions summary
-- Emissions by category
-- Carbon footprint progress chart
-- Recent calculation history
-- Chart.js is used to visualize historical footprint changes.
-
-## 🌳 Gamification
-**Eco Twin includes a lightweight progression system:**
-- Every saved calculation awards 10 points.
-- Completing a suggested eco-action awards additional points.
-- Eco Twin happiness increases when an action is completed, up to 100.
-- Low-emission calculations grow the tree to the next stage.
-- High-emission calculations can reduce the tree stage.
-- Medium-emission calculations leave the current tree stage unchanged.
-
-# Completing all five tree stages increases the tree level and resets the stage to 1.
-- Tree stages range from 1 to 5, while tree levels are displayed from 1 to 100 in the profile UI.
-
-# 💡 Eco-Friendly Suggestions
-**The Suggestions page contains recommendations for:**
-- Electricity and energy usage
-- Transportation
-- Industries / consumption
-- Waste management
-
-Users can filter suggestions using tabs and mark actions as completed to earn points.
-
-# 🌿 Eco Events & Workshops
-- The application includes curated sustainability event/workshop cards and also exposes an API that generates category-specific event suggestions.
-- The event content in the current project is static application content, not a live event-search service.
+The application includes sustainability-focused event/workshop content
+and an API that generates category-specific event suggestions.
 
 📈 Calculation History
 
-Each calculation is stored in SQLite with information such as:
+Each saved calculation records information such as:
 
-CO₂ total
+Total CO₂
 
 Category
 
-Calculation timestamp
+Calculation time
 
 Location
 
-Latitude/longitude
+Coordinates
 
-Electricity emissions
-
-Transport emissions
-
-Industrial/consumption emissions
-
-Waste emissions
+Category-wise emissions
 
 Input mode
 
-The profile dashboard displays the latest 10 calculations.
+💾 Session Persistence
 
-💾 Calculator State Persistence
+The calculator stores its current state in browser sessionStorage,
+allowing the latest calculator state to be restored during the same
+browser session.
 
-The calculator stores its current location/result state in browser sessionStorage, allowing the page to restore the latest calculator state during the same browser session.
+🔄 How It Works
 
-🧮 How the Calculation Works
+┌───────────────────────┐
+│       User opens      │
+│      EcoSessionTree   │
+└───────────┬───────────┘
+            │
+            ▼
+┌───────────────────────┐
+│      Open Calculator   │
+└───────────┬───────────┘
+            │
+            ▼
+┌───────────────────────────────┐
+│ Browser Geolocation API        │
+│ Latitude + Longitude           │
+└───────────┬───────────────────┘
+            │
+            ├──────────────► Reverse Geocoding
+            ├──────────────► Regional Carbon Factor
+            ├──────────────► Weather / AQI
+            └──────────────► Interactive Map
+            │
+            ▼
+┌───────────────────────────────┐
+│ Choose calculation mode       │
+│                               │
+│ Question Mode  /  Number Mode │
+└───────────┬───────────────────┘
+            │
+            ▼
+┌───────────────────────────────┐
+│ Emission Calculation Engine   │
+│ Electricity + Transport +     │
+│ Industries + Waste            │
+└───────────┬───────────────────┘
+            │
+            ▼
+┌───────────────────────────────┐
+│ Footprint Result               │
+│ kg CO₂/month + category        │
+└───────────┬───────────────────┘
+            │
+            ▼
+┌───────────────────────────────┐
+│ SQLite                         │
+│ Save calculation + update      │
+│ points / tree / happiness      │
+└───────────┬───────────────────┘
+            │
+            ▼
+┌───────────────────────────────┐
+│ Profile Dashboard              │
+│ History + charts + Eco Twin    │
+└───────────────────────────────┘
 
-Eco Twin calculates:
+🧮 Carbon Calculation
+
+The core calculation follows:
 
 Total CO₂ = Electricity + Transport + Industries + Waste
 
-Electricity
+⚡ Electricity
 
-Electricity CO₂ = Monthly kWh × Regional Electricity Factor
+Electricity CO₂ = Monthly Electricity × Regional Emission Factor
 
-The application contains regional electricity factors for India, Indian states/union territories, and a global fallback factor.
+The application contains regional electricity factors and a global
+fallback.
 
-If a matching state/country factor cannot be found, the code uses:
+Fallback:
 
 0.475 kg CO₂/kWh
 
-Transport
+🚗 Transport
 
 Transport CO₂ = Monthly Distance × Transport Emission Factor
 
-The application contains predefined factors for walking, bicycle, public transport, cars, SUVs, motorcycles, electric cars, hybrids, trains, metros, buses, and short-/long-haul flights.
+The application contains predefined factors for several transport types,
+including:
 
-Question Mode uses predefined daily-distance assumptions for its supported choices, while Number Mode currently applies the application's car factor to the supplied monthly distance.
+Walking
 
-Industries / Consumption
+Bicycle
+
+Public transport
+
+Car
+
+SUV
+
+Motorcycle
+
+Electric car
+
+Hybrid
+
+Train
+
+Metro
+
+Bus
+
+Short-haul flight
+
+Long-haul flight
+
+Question Mode uses predefined assumptions for supported transport
+choices.
+
+🏭 Industries / Consumption
 
 Question Mode uses predefined monthly estimates:
 
-Low    = 120 kg CO₂/month
-Medium = 280 kg CO₂/month
-High   = 580 kg CO₂/month
+Level      Estimated CO₂
 
-Number Mode accepts the industrial/consumption CO₂ value directly.
+Low         120 kg/month
+Medium      280 kg/month
+High        580 kg/month
 
-Waste
+Number Mode accepts the user's industrial/consumption CO₂ value
+directly.
+
+🗑️ Waste
 
 Waste CO₂ = Monthly Waste × Waste Emission Factor
 
 The current average waste factor is:
 
-0.89 kg CO₂ per kg of waste
+0.89 kg CO₂/kg waste
 
 🏷️ Footprint Classification
 
-Each emission category has its own thresholds.
+Each category uses its own thresholds.
 
-Category
+Category                    Low                Medium             High
 
-Low
+Electricity     < 150 kg/month   150--<300 kg/month   ≥ 300 kg/month
+Transport        < 80 kg/month    80--<150 kg/month   ≥ 150 kg/month
+Industries      < 150 kg/month   150--<300 kg/month   ≥ 300 kg/month
+Waste            < 40 kg/month     40--<70 kg/month    ≥ 70 kg/month
 
-Medium
-
-High
-
-Electricity
-
-< 150 kg/month
-
-150–<300 kg/month
-
-≥ 300 kg/month
-
-Transport
-
-< 80 kg/month
-
-80–<150 kg/month
-
-≥ 150 kg/month
-
-Industries
-
-< 150 kg/month
-
-150–<300 kg/month
-
-≥ 300 kg/month
-
-Waste
-
-< 40 kg/month
-
-40–<70 kg/month
-
-≥ 70 kg/month
-
-The overall footprint uses the highest-severity category among the four sections:
+The overall footprint is determined by the most severe category:
 
 High > Medium > Low
 
-This category controls the Eco Twin visual state and tree progression.
+🌳 Gamification
 
-📍 Location & External Services
+EcoSessionTree uses an Eco Twin system to make environmental tracking
+more engaging.
 
-OpenStreetMap / Nominatim
+Points
 
-Eco Twin uses Nominatim reverse geocoding to convert latitude/longitude into readable location information.
+Each saved calculation → +10 points
 
-It also uses OpenStreetMap tiles through Leaflet for map visualization.
+Completing an eco-action → additional points
 
-OpenWeather
+Happiness
 
-OpenWeather is optional and is used for current weather and air-quality display.
+Eco Twin happiness increases when actions are completed and is capped
+at:
 
-Without an API key:
+100
 
-Weather displays a fallback/unavailable state.
+Tree Progression
 
-AQI falls back to a moderate AQI value for display.
+The tree has 5 stages.
 
-Carbon-footprint calculation itself still works.
+Low footprint → tree can advance
 
-Caching
+Medium footprint → tree stage remains unchanged
 
-External location/weather/AQI responses are cached in memory for 5 minutes to reduce repeated external requests.
+High footprint → tree can regress
 
-🏗️ Architecture
+After completing all five stages, the tree level advances and the stage
+resets.
 
-Eco Twin follows a lightweight monolithic Flask architecture.
+🛠️ Technology Stack
 
-┌───────────────────────────────────────────────┐
-│                 Web Browser                   │
-│                                               │
-│  HTML + Jinja2 + CSS + Vanilla JavaScript     │
-│  Leaflet.js + Chart.js + Geolocation API      │
-└───────────────────────┬───────────────────────┘
-                        │ HTTP / JSON
-                        ▼
-┌───────────────────────────────────────────────┐
-│                  Flask App                    │
-│                    app.py                     │
-│                                               │
-│  Page Routes                                  │
-│  REST-style API Routes                        │
-│  Emission Calculation Engine                  │
-│  Location / Weather / AQI Integration         │
-│  Caching                                      │
-│  Gamification Logic                           │
-└───────────────┬───────────────────┬───────────┘
-                │                   │
-                ▼                   ▼
-        ┌───────────────┐   ┌──────────────────┐
-        │   SQLite DB   │   │ External Services │
-        │ eco_twin.db   │   │ Nominatim         │
-        │               │   │ OpenWeather       │
-        └───────────────┘   └──────────────────┘
+Layer                    Technology
 
-Frontend
+Backend                  Python 3.11
+Web Framework            Flask
+Frontend                 HTML5, CSS3, JavaScript
+Templating               Jinja2
+Database                 SQLite
+HTTP/API Client          Requests
+Environment Management   python-dotenv
+Maps                     Leaflet.js
+Map Data                 OpenStreetMap
+Charts                   Chart.js
+Location                 Browser Geolocation API
+Deployment Environment   Replit
 
-HTML5
+🏗️ Application Architecture
 
-Jinja2 templates
+EcoSessionTree follows a lightweight monolithic Flask architecture.
 
-CSS3
-
-Vanilla JavaScript
-
-Leaflet.js 1.9.4
-
-Chart.js
-
-Browser Geolocation API
-
-Browser sessionStorage
-
-Backend
-
-Python 3.11
-
-Flask
-
-SQLite3
-
-Requests
-
-python-dotenv
-
-Python logging
-
-Data Storage
-
-SQLite is used as a zero-configuration local relational database.
-
-The application automatically creates/updates the required tables when it starts.
+                    ┌─────────────────────┐
+                    │     Web Browser     │
+                    │                     │
+                    │ HTML + CSS + JS     │
+                    │ Jinja2              │
+                    │ Leaflet + Chart.js  │
+                    │ Geolocation API     │
+                    └──────────┬──────────┘
+                               │
+                         HTTP / JSON
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │      Flask App      │
+                    │       app.py        │
+                    │                     │
+                    │ • Page Routes       │
+                    │ • API Routes        │
+                    │ • CO₂ Calculations  │
+                    │ • Location Services │
+                    │ • Weather / AQI     │
+                    │ • Gamification      │
+                    │ • Caching           │
+                    └───────┬───────┬─────┘
+                            │       │
+                 ┌──────────┘       └───────────┐
+                 ▼                              ▼
+        ┌─────────────────┐            ┌──────────────────┐
+        │   SQLite DB     │            │ External Services│
+        │  eco_twin.db    │            │                  │
+        │                 │            │ • Nominatim      │
+        │ • users         │            │ • OpenWeather    │
+        │ • calculations  │            │ • OSM Tiles      │
+        │ • user_stats    │            │                  │
+        └─────────────────┘            └──────────────────┘
 
 📁 Project Structure
 
 EcoSessionTree/
 │
-├── app.py                         # Flask application, APIs, calculations and database logic
-├── eco_twin.db                    # SQLite database used by the application
-├── replit.md                      # Replit/project architecture notes
-├── .replit                        # Replit runtime and workflow configuration
-├── .gitignore                     # Ignores environment files
+├── app.py
+├── eco_twin.db
+├── .gitignore
+├── .replit
+├── replit.md
 │
 ├── templates/
-│   ├── home.html                  # Landing page and daily eco-fact
-│   ├── calculator.html            # Carbon footprint calculator
-│   ├── profile.html               # Profile, statistics, chart and history
-│   └── suggestions.html           # Recommendations, actions, events and maps
+│   ├── home.html
+│   ├── calculator.html
+│   ├── profile.html
+│   └── suggestions.html
 │
 ├── static/
 │   ├── css/
-│   │   └── style.css              # Main application stylesheet
+│   │   └── style.css
+│   │
 │   └── images/
-│       ├── eco-twin-high.jpg       # High-footprint Eco Twin state
-│       ├── eco-twin-medium.jpg     # Medium-footprint Eco Twin state
-│       └── eco-twin-low.jpg        # Low-footprint Eco Twin state
+│       ├── eco-twin-high.jpg
+│       ├── eco-twin-medium.jpg
+│       └── eco-twin-low.jpg
 │
-└── attached_assets/               # Project/source assets retained from the development environment
+└── attached_assets/
+    └── Development/source assets retained from the project environment
 
-The attached_assets/ directory contains development copies of application files/assets. The application itself serves the files from templates/ and static/.
+Core Files
 
-🌐 Application Pages
+File                                Responsibility
 
-Route
+app.py                            Flask server, routes, APIs,
+database logic, calculations,
+location services and gamification
 
-Purpose
+eco_twin.db                       SQLite database
 
-/
+templates/home.html               Landing page and eco-fact
 
-Eco Twin landing page with daily eco-fact
+templates/calculator.html         Carbon calculator
 
-/calculator
+templates/profile.html            Profile, statistics, charts and
+history
 
-Location-aware carbon footprint calculator
+templates/suggestions.html        Suggestions, actions, events and
+location cards
 
-/profile
+static/css/style.css              Application styling
 
-User statistics, tree progression, charts and history
+static/images/                    Eco Twin state images
 
-/suggestions
+.gitignore                        Prevents environment files from
+being committed
 
-Eco-friendly recommendations, actions, events and locations
+.replit                           Replit configuration
 
-🔌 API Endpoints
+replit.md                         Project/development notes
 
-Endpoint
+🌐 Application Routes
 
-Method
+Route                   Method                  Description
 
-Purpose
+/                     GET                     Landing page with daily
+eco-fact
 
-/api/calculate
+/calculator           GET                     Carbon footprint
+calculator
 
-POST
+/profile              GET                     Profile, statistics and
+calculation history
 
-Calculates emissions and stores the result
+🔌 API Reference
 
-/api/weather
+Endpoint                          Method                  Purpose
 
-GET
+/api/calculate                  POST                    Calculates and stores a
+carbon footprint
 
-Retrieves current weather data
+/api/weather                    GET                     Retrieves weather
+information
 
-/api/geocode
+/api/geocode                    GET                     Reverse-geocodes
+coordinates
 
-GET
+/api/eco-events                 GET                     Returns category-based
+eco events
 
-Reverse-geocodes coordinates
+/api/profile-history-detailed   GET                     Returns detailed
+calculation history
 
-/api/eco-events
+/api/delete-history             POST                    Deletes calculation
+history and resets core
+progress
 
-GET
+/api/daily-fact                 GET                     Returns an eco fact,
+action tip and analogy
 
-Generates category-based eco-events/workshops
+/api/complete-action            POST                    Completes an eco-action
+and awards points
 
-/api/profile-history-detailed
+/api/emission-intensity         GET                     Returns regional carbon
+intensity and AQI
+information
 
-GET
+/api/profile/stats              GET                     Returns profile
+statistics
 
-Returns detailed calculation history
+/api/profile/latest             GET                     Returns the latest
+footprint
 
-/api/delete-history
+/api/profile/history            GET                     Returns the latest 10
+calculations
 
-POST
+📦 Calculation API Examples
 
-Deletes the user's calculation history and resets core progress
-
-/api/daily-fact
-
-GET
-
-Returns a random eco-fact, action tip and analogy
-
-/api/complete-action
-
-POST
-
-Awards points and increases Eco Twin happiness
-
-/api/emission-intensity
-
-GET
-
-Returns regional carbon intensity and AQI information
-
-/api/profile/stats
-
-GET
-
-Returns profile statistics
-
-/api/profile/latest
-
-GET
-
-Returns the latest footprint result
-
-/api/profile/history
-
-GET
-
-Returns the latest 10 calculations
-
-/api/profile/monthly-stats
-
-GET
-
-Returns current-month aggregated emissions
-
-Example Calculation Request
+Question Mode
 
 {
   "lat": 12.9716,
@@ -504,7 +612,7 @@ Example Calculation Request
   "individual_sections": null
 }
 
-Example Number Mode Request
+Number Mode
 
 {
   "lat": 12.9716,
@@ -517,171 +625,126 @@ Example Number Mode Request
   "individual_sections": null
 }
 
-🗄️ Database Schema
+🗄️ Database Design
+
+The project uses SQLite for simple, zero-configuration local
+persistence.
 
 users
 
-Stores the application user record.
+Column         Purpose
 
-Column
-
-Description
-
-id
-
-Primary key
-
-username
-
-Unique username
-
-email
-
-User email
-
-created_at
-
-Account creation timestamp
+id           Primary key
+username     Unique username
+email        User email
+created_at   Account creation timestamp
 
 calculations
 
-Stores carbon-footprint calculation history.
+Column            Purpose
 
-Column
-
-Description
-
-id
-
-Primary key
-
-user_id
-
-Associated user
-
-electricity
-
-Electricity CO₂ emissions
-
-transport
-
-Transport CO₂ emissions
-
-diet
-
-Database field used to store industrial/consumption emissions
-
-waste
-
-Waste CO₂ emissions
-
-total_co2
-
-Total calculated CO₂
-
-category
-
-Low, Medium or High
-
-region
-
-Region/state associated with calculation
-
-input_mode
-
-Question or Number mode
-
-calculated_at
-
-Calculation timestamp
-
-latitude
-
-GPS latitude
-
-longitude
-
-GPS longitude
-
-city_name
-
-Reverse-geocoded city/locality
-
-state_name
-
-Reverse-geocoded state
+id              Primary key
+user_id         Associated user
+electricity     Electricity CO₂
+transport       Transport CO₂
+diet            Stores the industries/consumption emission value
+waste           Waste CO₂
+total_co2       Total CO₂
+category        Low, Medium or High
+region          Region/state
+input_mode      Question or Number
+calculated_at   Calculation timestamp
+latitude        GPS latitude
+longitude       GPS longitude
+city_name       City/locality
+state_name      State
 
 user_stats
 
-Stores gamification progress.
+Column                 Purpose
 
-Column
+user_id              User identifier
+total_points         Accumulated points
+eco_twin_happiness   Happiness score
+tree_level           Tree level
+current_tree_stage   Current stage from 1--5
+total_calculations   Number of calculations
 
-Description
+🌐 External Services
 
-user_id
+OpenStreetMap + Leaflet
 
-Primary/foreign key to user
+Used for map rendering and map tiles.
 
-total_points
+The application uses Leaflet.js on the frontend and OpenStreetMap-based
+services for location visualization.
 
-Accumulated points
+Nominatim
 
-eco_twin_happiness
+Used for reverse geocoding:
 
-Happiness score, capped at 100
+Latitude + Longitude
+        ↓
+Nominatim
+        ↓
+City / State / Country
 
-tree_level
+OpenWeather
 
-Current tree level
-
-current_tree_stage
-
-Current stage from 1 to 5
-
-total_calculations
-
-Number of saved calculations
-
-🔐 Environment Configuration
-
-Eco Twin reads environment variables using python-dotenv.
-
-Required
-
-SESSION_SECRET
-
-The application exits at startup if SESSION_SECRET is not set because it is used as the Flask session signing key.
-
-Generate a strong value locally with Python:
-
-python -c "import secrets; print(secrets.token_hex(32))"
-
-Set the generated value in your local environment or .env file.
-
-Optional
+Used for current weather and air-quality data when:
 
 OPENWEATHER_API_KEY
 
-If this variable is not configured, the application still runs and uses fallback weather/AQI display values.
+is configured.
 
-Security
+Response Caching
 
-Never commit .env or other environment files to Git. The repository's .gitignore is configured to ignore:
+External location/weather/AQI responses are cached in memory for
+approximately 5 minutes to reduce repeated requests.
+
+🔐 Environment Variables
+
+The application uses python-dotenv and environment variables for
+configuration.
+
+Required
+
+SESSION_SECRET=your-generated-secret
+
+SESSION_SECRET is required because Flask uses it to sign session data.
+
+Generate a secure value with:
+
+python -c "import secrets; print(secrets.token_hex(32))"
+
+Optional
+
+OPENWEATHER_API_KEY=your-openweather-api-key
+
+This enables live OpenWeather weather/AQI information.
+
+Never Commit Secrets
+
+The project ignores environment files:
 
 .env
 *.env
 
-If a real API key or secret has ever been committed, removing the file is not sufficient. The credential should be revoked/rotated and the Git history cleaned before publishing the repository.
+Do not commit API keys, session secrets, passwords, or other
+credentials to GitHub.
 
-🚀 Local Setup
+If a real credential has already been committed, simply deleting .env
+is not enough. The exposed credential should be revoked/rotated, and
+the Git history should be cleaned before publishing.
 
-1. Clone the repository
+🚀 Local Installation
+
+1. Clone the Repository
 
 git clone https://github.com/priyanshushe/EcoSessionTree.git
 cd EcoSessionTree
 
-2. Create a virtual environment
+2. Create a Virtual Environment
 
 Windows PowerShell
 
@@ -693,256 +756,188 @@ macOS / Linux
 python3 -m venv .venv
 source .venv/bin/activate
 
-3. Install dependencies
+3. Install Dependencies
 
-The current project does not include a requirements.txt, so install the Python packages used by app.py directly:
+The current project does not include a requirements.txt, so install
+the packages used by app.py:
 
 pip install Flask requests python-dotenv
 
-4. Configure the required session secret
+4. Configure Environment Variables
 
-PowerShell:
+Create a local .env file:
 
-$env:SESSION_SECRET = python -c "import secrets; print(secrets.token_hex(32))"
+SESSION_SECRET=<generated-secret>
+OPENWEATHER_API_KEY=<optional-openweather-key>
 
-For a persistent local configuration, create a .env file and place the generated SESSION_SECRET value there. Keep that file out of Git.
+Keep .env local and never commit it.
 
-5. Optional: configure OpenWeather
-
-Add OPENWEATHER_API_KEY to your local environment if you want live weather and AQI information.
-
-6. Run the application
+5. Start the Application
 
 python app.py
 
-The Flask development server listens on:
+The application runs on:
 
 http://127.0.0.1:5000
 
-The application is configured to bind to 0.0.0.0:5000, which also makes it suitable for environments such as Replit that expose the local port externally.
+The Flask server is configured to bind to:
+
+0.0.0.0:5000
+
+which is also suitable for hosted environments such as Replit.
 
 ▶️ Running on Replit
 
-The repository includes a .replit configuration for Python 3.11.
+The repository contains a .replit configuration for the project.
 
-The configured workflow starts the application with:
+The configured workflow starts the Flask application with:
 
 python app.py
 
-and exposes the Flask application through port 5000.
+and uses port:
 
-Before running the project on Replit, configure SESSION_SECRET in the Replit Secrets/environment configuration. OPENWEATHER_API_KEY can also be added if live weather/AQI data is required.
+5000
 
-🔄 Typical User Flow
+Before running on Replit, add the following through the Replit
+Secrets/environment configuration:
 
-Open Eco Twin
-      │
-      ▼
-Visit Calculator
-      │
-      ▼
-Allow Browser Location
-      │
-      ├──► Reverse Geocoding
-      ├──► Regional Carbon Intensity
-      ├──► Weather / AQI
-      └──► Map Display
-      │
-      ▼
-Choose Question Mode or Number Mode
-      │
-      ▼
-Select/Enter Activity Data
-      │
-      ▼
-Calculate Footprint
-      │
-      ▼
-CO₂ Total + Category + Breakdown
-      │
-      ▼
-Save Calculation to SQLite
-      │
-      ▼
-Update Points + Tree + Happiness
-      │
-      ├──► Profile Dashboard
-      └──► Personalized Suggestions
+SESSION_SECRET
 
-🎮 Gamification Logic
+Optionally add:
 
-When a calculation is saved:
+OPENWEATHER_API_KEY
 
-The user receives 10 points.
+🔒 Security Notes
 
-The calculation category is evaluated.
+Keep .env outside Git history.
 
-Low emissions advance the tree stage.
+Never expose SESSION_SECRET.
 
-When stage 5 is completed, the tree level increases and the stage returns to 1.
+Never commit API keys.
 
-Medium emissions keep the tree at its current stage.
+Rotate credentials if they were previously exposed.
 
-High emissions reduce the tree stage by one, but never below stage 1.
+Browser geolocation requires user permission.
 
-When an eco-action is completed:
+External API availability can affect weather/AQI and
+reverse-geocoding features.
 
-The supplied action points are added to the total.
+The project uses SQLite and is primarily designed as a lightweight
+application/demo rather than a production multi-user deployment.
 
-Eco Twin happiness increases by 5.
+⚠️ Current Scope & Limitations
 
-Happiness is capped at 100.
+A few implementation details are worth knowing before deploying the
+project publicly:
 
-Current suggestion action rewards include:
+The application is a carbon-footprint estimator. Its output
+depends on predefined emission factors and user-provided/assumed
+activity values.
 
-Action area
+Number Mode transport currently applies the application's car
+factor to the supplied monthly distance.
 
-Points
+Nearby eco-friendly locations are application-defined cards, not
+results from a live places database.
 
-Power Plants / Electricity
+Eco events/workshops are curated/generated application content,
+not a live event-search feed.
 
-+15
+Weather/AQI requires OpenWeather configuration for live data.
 
-Transport
+The application uses a lightweight local SQLite database, which
+is suitable for development and demonstration but would need a more
+robust database/deployment architecture for larger production
+workloads.
 
-+20
+Authentication is lightweight in the current implementation
+rather than a full production authentication system.
 
-Industries
+🚀 Future Enhancements
 
-+25
+Potential extensions for EcoSessionTree include:
 
-Waste
+User authentication and secure account management
 
-+15
+PostgreSQL or another production-grade database
 
-🧠 Design Decisions
+Live eco-friendly place discovery
 
-Flask + Server-Side Templates
+Live sustainability event discovery
 
-Flask and Jinja2 keep the application lightweight while still allowing dynamic pages and JSON APIs.
+More detailed dietary carbon calculations
 
-Vanilla JavaScript
+Vehicle-specific transport calculations
 
-Client-side functionality is implemented without a frontend framework, reducing setup complexity while providing interactive maps, charts, mode switching, state persistence, and asynchronous API calls.
+Carbon-offset recommendations
 
-SQLite
+Monthly and yearly sustainability reports
 
-SQLite provides simple, zero-configuration persistence for a small/local application without requiring a separate database server.
+Export footprint history as PDF/CSV
 
-In-Memory Caching
+More advanced analytics and dashboards
 
-A simple Python dictionary with a five-minute TTL reduces repeated requests to external services. This is appropriate for a small deployment but would normally be replaced with a shared cache such as Redis for horizontally scaled production deployments.
+Mobile-responsive progressive web app
 
-⚠️ Important Implementation Notes
+Personalized sustainability goals
 
-The application is an estimation tool, not a certified carbon-accounting system.
+Leaderboards and community challenges
 
-Question Mode relies on predefined activity assumptions rather than user-specific measurements.
+Cloud deployment with production monitoring
 
-Emission factors are hard-coded in app.py.
+📚 Learning & Project Context
 
-The electricity factor is location-sensitive, while the current Number Mode transport calculation uses the application's car emission factor for the supplied monthly distance.
+EcoSessionTree demonstrates the integration of several practical
+software-development concepts in one application:
 
-The calculations.diet database column is retained from an earlier schema but currently stores industrial/consumption emissions.
+Flask web development
 
-The current application uses a single default_user record rather than a full registration/login system.
+REST-style APIs
 
-eco_twin.db is local SQLite state and should generally not be treated as production database infrastructure.
+Jinja2 templating
 
-The event cards and nearby eco-location cards are application-defined content rather than live discovery from an events/places provider.
+Client-side JavaScript
 
-The Flask server is configured with debug=True in app.py; disable debug mode before production deployment.
+Browser geolocation
 
-🔒 Privacy & Security Considerations
+Reverse geocoding
 
-Eco Twin uses browser geolocation only when the user grants permission through the browser.
+External API integration
 
-The application stores calculation-related location coordinates and derived city/state information in its local SQLite database. The current project does not implement a traditional multi-user authentication system.
+SQLite database design
 
-For deployment:
+Data visualization
 
-Keep SESSION_SECRET private.
+Environmental data processing
 
-Keep OPENWEATHER_API_KEY private.
+Gamification
 
-Never commit .env files.
+Session/state management
 
-Rotate any credential that has previously been exposed.
+Environment-based configuration
 
-Disable Flask debug mode.
+It can therefore serve as a practical project for demonstrating
+full-stack web development, API integration, database management, and
+sustainability-focused software design.
 
-Use HTTPS when deployed publicly.
+📄 License
 
-Apply rate limiting and stronger validation if the APIs are exposed to untrusted users.
+No explicit open-source license is currently included in the repository.
 
-Consider PostgreSQL and a shared cache for multi-user production deployments.
+Unless a license is added, the project should be treated as all rights
+reserved by the copyright holder. Add an appropriate LICENSE file
+before granting others permission to reuse, modify, or redistribute the
+code.
 
-🛠️ Technology Stack
+👨‍💻 Project Repository
 
-Layer
+EcoSessionTree
 
-Technology
+GitHub: https://github.com/priyanshushe/EcoSessionTree
 
-Language
+::: {align="center"}
 
-Python 3.11
+🌱 Measure your impact. Make better choices. Grow your Eco Twin.
 
-Backend
-
-Flask
-
-Templating
-
-Jinja2
-
-Database
-
-SQLite3
-
-HTTP Client
-
-Requests
-
-Environment Management
-
-python-dotenv
-
-Frontend
-
-HTML5, CSS3, Vanilla JavaScript
-
-Maps
-
-Leaflet.js 1.9.4 + OpenStreetMap
-
-Charts
-
-Chart.js
-
-Location
-
-Browser Geolocation API
-
-Reverse Geocoding
-
-OpenStreetMap Nominatim
-
-Weather / AQI
-
-OpenWeather API
-
-Deployment Configuration
-
-Replit
-
-📜 License
-
-No license file is currently included in the project repository. The project should therefore be treated as all rights reserved unless a license is added by the project owner.
-
-👨‍💻 Project
-
-Eco Twin — Carbon Footprint Calculator
-
-Repository: https://github.com/priyanshushe/EcoSessionTree
-
-Built with Python, Flask, SQLite, JavaScript, Leaflet, Chart.js, OpenStreetMap, and optional OpenWeather integration.
+EcoSessionTree
+:::
