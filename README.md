@@ -1,4 +1,4 @@
-🌍 Eco Twin
+#🌍 Eco Twin
 
 A location-aware carbon footprint calculator that turns everyday environmental data into an interactive personal Eco Twin experience.
 
