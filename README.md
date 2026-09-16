@@ -1,4 +1,4 @@
-##🌍 Eco Twin
+**🌍 Eco Twin**
 
 A location-aware carbon footprint calculator that turns everyday environmental data into an interactive personal Eco Twin experience.
 
@@ -6,13 +6,13 @@ Eco Twin is a Flask-based web application for estimating monthly CO₂ emissions
 
 The application provides two ways to calculate a footprint:
 
-Question Mode – answer simple qualitative questions and let the application use predefined monthly activity estimates.
+**Question Mode** – answer simple qualitative questions and let the application use predefined monthly activity estimates.
 
-Number Mode – enter numerical monthly values for more direct control over the calculation.
+**Number Mode** – enter numerical monthly values for more direct control over the calculation.
 
 After each calculation, Eco Twin stores the result locally in SQLite, awards points, updates the user's tree progression, and makes the result available on the profile dashboard.
 
-✨ Features
+## ✨ Features
 
 🌱 Carbon Footprint Calculator
 
@@ -20,187 +20,125 @@ Calculates estimated monthly CO₂ emissions in kg CO₂/month.
 
 Also displays the equivalent annual value in tonnes CO₂/year.
 
-Breaks emissions into four categories:
+**Breaks emissions into four categories:**
 
 ⚡ Electricity
-
 🚗 Transport
-
 🏭 Industries / consumption impact
-
 🗑️ Waste
 
-Classifies the result as Low, Medium, or High.
+**Classifies the result as Low, Medium, or High.**
 
 Uses the highest category among the four sections as the overall footprint category.
 
-❓ Question Mode
+## ❓ Question Mode
 
 Designed for users who do not know their exact monthly figures.
-
 The application converts simple choices into predefined activity estimates:
 
-Category
+## Category
 
 Low / Minimal
-
 Medium / Average
-
 High
-
 Electricity
-
 100 kWh/month
-
 300 kWh/month
-
 600 kWh/month
 
-Transport
+## Transport
 
 0 km/month
-
 Depends on selected transport
-
-Depends on selected transport
-
 Industries
-
 120 kg CO₂/month
-
 280 kg CO₂/month
-
 580 kg CO₂/month
 
-Waste
-
+## Waste
 30 kg/month
-
 60 kg/month
-
 100 kg/month
 
-For transport, the qualitative choices include walking/biking, public transit, car, and SUV.
+## For transport, the qualitative choices include walking/biking, public transit, car, and SUV.
 
-🔢 Number Mode
+## 🔢 Number Mode
 
-Allows users to directly enter:
+**Allows users to directly enter:**
+- Electricity consumption in kWh/month
+- Transport distance in km/month
+- Industrial/consumption emissions in kg CO₂/month
 
-Electricity consumption in kWh/month
+## Waste generated in kg/month
 
-Transport distance in km/month
+## 📍 GPS-Based Location Awareness
 
-Industrial/consumption emissions in kg CO₂/month
+- The calculator uses the browser's Geolocation API to obtain the user's coordinates.
 
-Waste generated in kg/month
+## Those coordinates are then used to:
 
-📍 GPS-Based Location Awareness
+- Reverse-geocode the location into a city/state/country.
+- Select a regional electricity emission factor.
+- Display the user's location on an interactive map.
+- Retrieve optional weather information.
+- Retrieve air-quality information.
 
-The calculator uses the browser's Geolocation API to obtain the user's coordinates.
+## Location data is required by the calculator interface because the electricity calculation can vary by region.
 
-Those coordinates are then used to:
+## 🗺️ Interactive Maps
+- The calculator uses Leaflet.js and OpenStreetMap tiles to display the detected location.
+- The Suggestions page also provides category-based eco-friendly location cards with Google Maps directions generated from the user's current coordinates.
+- The nearby eco-friendly locations shown by the Suggestions page are application-defined example locations relative to the user's coordinates; they are not retrieved from a live places database.
 
-Reverse-geocode the location into a city/state/country.
+## 🌤️ Weather & Air Quality
+**When an OPENWEATHER_API_KEY is configured, Eco Twin can display:**
+- Current temperature
+- Weather description
+- Humidity
+- Wind speed
+- Air Quality Index (AQI)
 
-Select a regional electricity emission factor.
+## The application continues to work without the API key. In that case it uses fallback values for weather/AQI display.
 
-Display the user's location on an interactive map.
+## 📊 Profile Dashboard
 
-Retrieve optional weather information.
+**The Profile page provides:**
+- Total points
+- Eco Twin happiness score
+- Total number of calculations
+- Current tree stage
+- Current tree level
+- Latest footprint category
+- Monthly emissions summary
+- Emissions by category
+- Carbon footprint progress chart
+- Recent calculation history
+- Chart.js is used to visualize historical footprint changes.
 
-Retrieve air-quality information.
+## 🌳 Gamification
+**Eco Twin includes a lightweight progression system:**
+- Every saved calculation awards 10 points.
+- Completing a suggested eco-action awards additional points.
+- Eco Twin happiness increases when an action is completed, up to 100.
+- Low-emission calculations grow the tree to the next stage.
+- High-emission calculations can reduce the tree stage.
+- Medium-emission calculations leave the current tree stage unchanged.
 
-Location data is required by the calculator interface because the electricity calculation can vary by region.
+# Completing all five tree stages increases the tree level and resets the stage to 1.
+- Tree stages range from 1 to 5, while tree levels are displayed from 1 to 100 in the profile UI.
 
-🗺️ Interactive Maps
-
-The calculator uses Leaflet.js and OpenStreetMap tiles to display the detected location.
-
-The Suggestions page also provides category-based eco-friendly location cards with Google Maps directions generated from the user's current coordinates.
-
-The nearby eco-friendly locations shown by the Suggestions page are application-defined example locations relative to the user's coordinates; they are not retrieved from a live places database.
-
-🌤️ Weather & Air Quality
-
-When an OPENWEATHER_API_KEY is configured, Eco Twin can display:
-
-Current temperature
-
-Weather description
-
-Humidity
-
-Wind speed
-
-Air Quality Index (AQI)
-
-The application continues to work without the API key. In that case it uses fallback values for weather/AQI display.
-
-📊 Profile Dashboard
-
-The Profile page provides:
-
-Total points
-
-Eco Twin happiness score
-
-Total number of calculations
-
-Current tree stage
-
-Current tree level
-
-Latest footprint category
-
-Monthly emissions summary
-
-Emissions by category
-
-Carbon footprint progress chart
-
-Recent calculation history
-
-Chart.js is used to visualize historical footprint changes.
-
-🌳 Gamification
-
-Eco Twin includes a lightweight progression system:
-
-Every saved calculation awards 10 points.
-
-Completing a suggested eco-action awards additional points.
-
-Eco Twin happiness increases when an action is completed, up to 100.
-
-Low-emission calculations grow the tree to the next stage.
-
-High-emission calculations can reduce the tree stage.
-
-Medium-emission calculations leave the current tree stage unchanged.
-
-Completing all five tree stages increases the tree level and resets the stage to 1.
-
-Tree stages range from 1 to 5, while tree levels are displayed from 1 to 100 in the profile UI.
-
-💡 Eco-Friendly Suggestions
-
-The Suggestions page contains recommendations for:
-
-Electricity and energy usage
-
-Transportation
-
-Industries / consumption
-
-Waste management
+# 💡 Eco-Friendly Suggestions
+**The Suggestions page contains recommendations for:**
+- Electricity and energy usage
+- Transportation
+- Industries / consumption
+- Waste management
 
 Users can filter suggestions using tabs and mark actions as completed to earn points.
 
-🌿 Eco Events & Workshops
-
-The application includes curated sustainability event/workshop cards and also exposes an API that generates category-specific event suggestions.
-
-The event content in the current project is static application content, not a live event-search service.
+# 🌿 Eco Events & Workshops
+- The application includes curated sustainability event/workshop cards and also exposes an API that generates category-specific event suggestions.
+- The event content in the current project is static application content, not a live event-search service.
 
 📈 Calculation History
 
